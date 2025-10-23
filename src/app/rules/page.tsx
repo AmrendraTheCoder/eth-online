@@ -30,46 +30,37 @@ import {
   Edit,
   Bot,
   Target,
-  Zap,
-  AlertCircle,
   CheckCircle,
   Clock,
   Shield,
   Code,
-  ExternalLink,
   Activity,
 } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLitProtocol } from "@/hooks/useLitProtocol";
 import {
   getAllRules,
-  getActiveRules,
   addRule,
   updateRule,
   deleteRule,
-  getRuleExecutionHistory,
   getRuleStats,
+  AirdropRule,
 } from "@/lib/rules-engine";
 import { getAllLitActionTemplates } from "@/lib/lit-actions-executor";
 
-interface Rule {
-  id: string;
-  name: string;
-  trigger: string;
-  condition: string;
-  action: string;
-  amount: string;
-  chain: string;
-  enabled: boolean;
-  lastExecuted?: string;
-  executions: number;
+type Rule = AirdropRule;
+
+interface RuleStats {
+  totalRules: number;
+  activeRules: number;
+  totalExecutions: number;
+  averageExecutionsPerRule: number;
+  mostExecutedRule: string;
 }
 
 export default function RulesEngine() {
-  const { isConnected: isLitConnected, connectionStatus } = useLitProtocol();
+  const { isConnected: isLitConnected } = useLitProtocol();
   const [rules, setRules] = useState<Rule[]>([]);
-  const [litActionTemplates, setLitActionTemplates] = useState<any[]>([]);
-  const [ruleStats, setRuleStats] = useState<any>(null);
+  const [ruleStats, setRuleStats] = useState<RuleStats | null>(null);
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newRule, setNewRule] = useState({
@@ -86,13 +77,13 @@ export default function RulesEngine() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        
         // Load rules from rules engine
-        const allRules = getAllRules();
+        const allRules = getAllRules() as AirdropRule[];
         setRules(allRules);
 
-        // Load Lit Action templates
-        const templates = getAllLitActionTemplates();
-        setLitActionTemplates(templates);
+        // Load Lit Action templates (for future use)
+        getAllLitActionTemplates();
 
         // Load rule statistics
         const stats = getRuleStats();
@@ -137,9 +128,18 @@ export default function RulesEngine() {
       // Create rule using rules engine
       const newRuleData = addRule({
         name: newRule.name,
-        trigger: newRule.trigger as any,
+        trigger: newRule.trigger as
+          | "new_airdrop"
+          | "price_threshold"
+          | "volume_spike"
+          | "time_based",
         condition: newRule.condition,
-        action: newRule.action as any,
+        action: newRule.action as
+          | "bridge"
+          | "swap"
+          | "stake"
+          | "bridge_and_swap"
+          | "interact_contract",
         amount: newRule.amount,
         chain: newRule.chain,
         enabled: newRule.enabled,
@@ -233,7 +233,7 @@ export default function RulesEngine() {
               Rules Engine
             </h1>
             <p className="text-gray-600">
-              Configure your agent's automation rules with Lit Actions. Set
+              Configure your agent&apos;s automation rules with Lit Actions. Set
               triggers and actions for automatic airdrop farming.
             </p>
             {ruleStats && (
@@ -522,7 +522,8 @@ export default function RulesEngine() {
                           <span className="text-blue-600">Last Execution:</span>
                           <span className="ml-2">
                             {new Date(
-                              rule.litActionLastExecution.timestamp
+                              rule.litActionLastExecution?.timestamp ||
+                                Date.now()
                             ).toLocaleString()}
                           </span>
                         </div>

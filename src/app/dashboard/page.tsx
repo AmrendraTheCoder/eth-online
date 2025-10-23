@@ -12,18 +12,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   Bot,
   Activity,
   Settings,
-  Target,
   TrendingUp,
-  Coins,
   Zap,
   CheckCircle,
-  Clock,
-  AlertCircle,
   Plus,
   Play,
   Pause,
@@ -36,7 +31,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useLitProtocol } from "@/hooks/useLitProtocol";
 
 export default function DashboardPage() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const {
     pkpWallet,
     litActions,
@@ -59,8 +54,24 @@ export default function DashboardPage() {
     lastActivity: "2 minutes ago",
   });
 
-  const [realMetrics, setRealMetrics] = useState<any>(null);
-  const [executionHistory, setExecutionHistory] = useState<any[]>([]);
+  const [realMetrics, setRealMetrics] = useState<{
+    totalExecutions: number;
+    activeActions: number;
+    successRate: number;
+    totalProfit: string;
+    uptime: string;
+    pkpWallets: number;
+    fundedWallets: number;
+    totalBalance: string;
+  } | null>(null);
+  const [executionHistory, setExecutionHistory] = useState<
+    {
+      id: string;
+      success: boolean;
+      timestamp: number;
+      txHash?: string;
+    }[]
+  >([]);
 
   // Load real data on component mount
   useEffect(() => {
@@ -161,7 +172,7 @@ export default function DashboardPage() {
           },
         ];
 
-  const rules = litActions.map((action, index) => ({
+  const rules = litActions.map((action) => ({
     id: action.id,
     name: action.name,
     status: action.status,

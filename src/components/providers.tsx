@@ -41,7 +41,7 @@ function getQueryClient() {
 }
 
 // Create a singleton config to prevent multiple WalletConnect initializations
-let config: any = undefined;
+let config: ReturnType<typeof getDefaultConfig> | undefined = undefined;
 
 function getConfig() {
   if (!config) {
