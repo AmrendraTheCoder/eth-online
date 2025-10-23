@@ -1,6 +1,7 @@
 "use client";
 
 import { useAccount } from "wagmi";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -11,31 +12,37 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   Bot,
   Activity,
   Settings,
-  Target,
   TrendingUp,
-  Coins,
   Zap,
   CheckCircle,
-  Clock,
-  AlertCircle,
   Plus,
   Play,
   Pause,
   RotateCcw,
+  Shield,
+  Link as LinkIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useLitProtocol } from "@/hooks/useLitProtocol";
 
 export default function DashboardPage() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
+  const {
+    pkpWallet,
+    litActions,
+    isConnected: isLitConnected,
+    connectionStatus,
+    getAgentMetrics,
+    getPKPWalletBalance,
+    getLitActionExecutionHistory,
+  } = useLitProtocol();
 
-  // Mock data for DropPilot dashboard
-  const agentData = {
+  const [agentData, setAgentData] = useState({
     name: "My Airdrop Agent",
     walletAddress: "0x742d...8f3a",
     status: "Active" as const,
@@ -45,99 +52,168 @@ export default function DashboardPage() {
     rulesActive: 3,
     totalExecutions: 47,
     lastActivity: "2 minutes ago",
-  };
+  });
+
+  const [realMetrics, setRealMetrics] = useState<{
+    totalExecutions: number;
+    activeActions: number;
+    successRate: number;
+    totalProfit: string;
+    uptime: string;
+    pkpWallets: number;
+    fundedWallets: number;
+    totalBalance: string;
+  } | null>(null);
+  const [executionHistory, setExecutionHistory] = useState<
+    {
+      id: string;
+      success: boolean;
+      timestamp: number;
+      txHash?: string;
+    }[]
+  >([]);
+
+  // Load real data on component mount
+  useEffect(() => {
+    const loadRealData = async () => {
+      try {
+        // Get real agent metrics
+        const metrics = getAgentMetrics();
+        setRealMetrics(metrics);
+
+        // Get execution history
+        const history = getLitActionExecutionHistory();
+        setExecutionHistory(history);
+
+        // Update agent data with real PKP wallet info
+        if (pkpWallet) {
+          const balance = await getPKPWalletBalance();
+          setAgentData((prev) => ({
+            ...prev,
+            walletAddress: pkpWallet.address,
+            balance: `${balance} ETH`,
+            totalProfit: metrics.totalProfit,
+            uptime: metrics.uptime,
+            rulesActive: metrics.activeActions,
+            totalExecutions: metrics.totalExecutions,
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to load real data:", error);
+      }
+    };
+
+    if (isLitConnected) {
+      loadRealData();
+    }
+  }, [
+    isLitConnected,
+    pkpWallet,
+    getAgentMetrics,
+    getPKPWalletBalance,
+    getLitActionExecutionHistory,
+  ]);
 
   const stats = [
     {
       title: "Total Profit",
-      value: "$127.50",
+      value: realMetrics?.totalProfit || "$0.00",
       change: "+12.3%",
       icon: TrendingUp,
       color: "text-green-600",
     },
     {
       title: "Active Rules",
-      value: "3",
+      value: realMetrics?.activeActions?.toString() || "0",
       change: "+1 this week",
       icon: Settings,
       color: "text-blue-600",
     },
     {
       title: "Executions",
-      value: "47",
+      value: realMetrics?.totalExecutions?.toString() || "0",
       change: "+8 today",
       icon: Zap,
       color: "text-purple-600",
     },
     {
-      title: "Airdrops Found",
-      value: "12",
-      change: "+2 this week",
-      icon: Target,
+      title: "PKP Wallets",
+      value: realMetrics?.pkpWallets?.toString() || "0",
+      change: `+${realMetrics?.fundedWallets || 0} funded`,
+      icon: Shield,
       color: "text-orange-600",
     },
   ];
 
-  const recentActivities = [
-    {
-      id: "1",
-      type: "rule_execution",
-      title: "ZkSync Airdrop Rule Executed",
-      description: "Successfully bridged 0.05 ETH and performed 2 swaps",
-      timestamp: "2 minutes ago",
-      status: "success",
-      profit: "+$12.50",
-    },
-    {
-      id: "2",
-      type: "airdrop_detected",
-      title: "New Airdrop Detected",
-      description: "LayerZero airdrop opportunity found on Arbitrum",
-      timestamp: "15 minutes ago",
-      status: "success",
-    },
-    {
-      id: "3",
-      type: "transaction",
-      title: "Token Swap Completed",
-      description: "Swapped 0.1 ETH for USDC on Uniswap",
-      timestamp: "1 hour ago",
-      status: "success",
-      profit: "+$8.30",
-    },
-  ];
+  const recentActivities =
+    executionHistory.length > 0
+      ? executionHistory.slice(0, 3).map((exec, index) => ({
+          id: exec.id || `exec_${index}`,
+          type: "lit_action_execution",
+          title: `Lit Action Executed`,
+          description: exec.success
+            ? "Lit Action completed successfully"
+            : "Lit Action failed",
+          timestamp: new Date(exec.timestamp).toLocaleString(),
+          status: exec.success ? "success" : "failed",
+          profit: exec.success ? "+$0.00" : undefined,
+          txHash: exec.txHash,
+        }))
+      : [
+          {
+            id: "1",
+            type: "lit_action_execution",
+            title: "Lit Action Ready",
+            description:
+              "Lit Protocol integration active and ready for automation",
+            timestamp: "Just now",
+            status: "success",
+            profit: "+$0.00",
+          },
+        ];
 
-  const rules = [
-    {
-      id: "1",
-      name: "ZkSync Airdrop Hunter",
-      status: "active",
-      executions: 3,
-      lastExecuted: "2 hours ago",
-      profit: "+$12.50",
-    },
-    {
-      id: "2",
-      name: "LayerZero Bridge Bot",
-      status: "active",
-      executions: 1,
-      lastExecuted: "1 day ago",
-      profit: "+$5.20",
-    },
-    {
-      id: "3",
-      name: "Starknet DEX Trader",
-      status: "paused",
-      executions: 0,
-      lastExecuted: "Never",
-      profit: "$0.00",
-    },
-  ];
+  const rules = litActions.map((action) => ({
+    id: action.id,
+    name: action.name,
+    status: action.status,
+    executions: action.executions,
+    lastExecuted: action.lastExecution
+      ? new Date(action.lastExecution).toLocaleString()
+      : "Never",
+    profit: action.executions > 0 ? "+$0.00" : "$0.00",
+  }));
 
   if (!isConnected) {
     return (
       <div className="container mx-auto px-4 py-20">
-        <ConnectButton />
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Connect Your Wallet</h1>
+          <p className="text-gray-600 mb-6">
+            Connect your wallet to access the DropPilot dashboard
+          </p>
+          <ConnectButton />
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLitConnected) {
+    return (
+      <div className="container mx-auto px-4 py-20">
+        <div className="text-center">
+          <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-4">
+            Lit Protocol Not Connected
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Lit Protocol is required for autonomous agent operations
+          </p>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
+            <p className="text-sm text-yellow-800">
+              Please ensure Lit Protocol is properly configured and connected.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -146,10 +222,33 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">DropPilot Dashboard</h1>
-          <p className="text-muted-foreground">
-            Monitor your automated airdrop farming agent and track performance
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">DropPilot Dashboard</h1>
+              <p className="text-muted-foreground">
+                Monitor your automated airdrop farming agent and track
+                performance
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 border-green-200"
+              >
+                <Shield className="w-3 h-3 mr-1" />
+                Lit Protocol Active
+              </Badge>
+              {connectionStatus && (
+                <Badge
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200"
+                >
+                  <LinkIcon className="w-3 h-3 mr-1" />
+                  {connectionStatus.network}
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Agent Status Card */}

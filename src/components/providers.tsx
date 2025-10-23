@@ -16,26 +16,67 @@ import {
   sepolia,
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import {
+  appConfig,
+  validateConfig,
+  getDevelopmentWarnings,
+} from "@/lib/config";
 import "@rainbow-me/rainbowkit/styles.css";
 
-const { wallets } = getDefaultWallets();
+// Create a singleton QueryClient to prevent multiple instances
+let queryClient: QueryClient | undefined = undefined;
 
-const config = getDefaultConfig({
-  appName: "NIMBUS - DropPilot",
-  projectId:
-    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
-    "e6ee1c6d5d0e8c745d91d2b0c9f8c9e0",
-  wallets,
-  chains: [mainnet, polygon, optimism, arbitrum, base, sepolia],
-  ssr: true,
-});
+function getQueryClient() {
+  if (!queryClient) {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 60 * 1000, // 1 minute
+          retry: 1,
+        },
+      },
+    });
+  }
+  return queryClient;
+}
 
-const queryClient = new QueryClient();
+// Create a singleton config to prevent multiple WalletConnect initializations
+let config: ReturnType<typeof getDefaultConfig> | undefined = undefined;
+
+function getConfig() {
+  if (!config) {
+    const { wallets } = getDefaultWallets();
+
+    // Validate configuration
+    const validation = validateConfig();
+    if (!validation.valid) {
+      console.warn("⚠️ Configuration validation failed:", validation.errors);
+    }
+
+    // Show development warnings
+    const warnings = getDevelopmentWarnings();
+    if (warnings.length > 0) {
+      console.warn("⚠️ Development warnings:", warnings);
+    }
+
+    config = getDefaultConfig({
+      appName: appConfig.walletConnect.appName,
+      projectId: appConfig.walletConnect.projectId,
+      wallets,
+      chains: [mainnet, polygon, optimism, arbitrum, base, sepolia],
+      ssr: true,
+    });
+  }
+  return config;
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const wagmiConfig = getConfig();
+  const queryClientInstance = getQueryClient();
+
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClientInstance}>
         <RainbowKitProvider>{children}</RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

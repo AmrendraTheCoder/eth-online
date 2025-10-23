@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,64 +30,37 @@ import {
   Edit,
   Bot,
   Target,
-  Zap,
-  AlertCircle,
   CheckCircle,
   Clock,
+  Shield,
+  Code,
+  Activity,
 } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useLitProtocol } from "@/hooks/useLitProtocol";
+import {
+  getAllRules,
+  addRule,
+  updateRule,
+  deleteRule,
+  getRuleStats,
+  AirdropRule,
+} from "@/lib/rules-engine";
+import { getAllLitActionTemplates } from "@/lib/lit-actions-executor";
 
-interface Rule {
-  id: string;
-  name: string;
-  trigger: string;
-  condition: string;
-  action: string;
-  amount: string;
-  chain: string;
-  enabled: boolean;
-  lastExecuted?: string;
-  executions: number;
+type Rule = AirdropRule;
+
+interface RuleStats {
+  totalRules: number;
+  activeRules: number;
+  totalExecutions: number;
+  averageExecutionsPerRule: number;
+  mostExecutedRule: string;
 }
 
 export default function RulesEngine() {
-  const [rules, setRules] = useState<Rule[]>([
-    {
-      id: "1",
-      name: "ZkSync Airdrop Hunter",
-      trigger: "new_airdrop",
-      condition: "chain = 'zksync' AND amount > 1000000",
-      action: "bridge_and_swap",
-      amount: "0.05",
-      chain: "zksync",
-      enabled: true,
-      lastExecuted: "2 hours ago",
-      executions: 3,
-    },
-    {
-      id: "2",
-      name: "LayerZero Bridge Bot",
-      trigger: "new_airdrop",
-      condition: "chain = 'arbitrum' AND project = 'layerzero'",
-      action: "bridge",
-      amount: "0.1",
-      chain: "arbitrum",
-      enabled: true,
-      lastExecuted: "1 day ago",
-      executions: 1,
-    },
-    {
-      id: "3",
-      name: "Starknet DEX Trader",
-      trigger: "new_airdrop",
-      condition: "chain = 'starknet' AND dex_volume > 1000",
-      action: "swap",
-      amount: "0.02",
-      chain: "starknet",
-      enabled: false,
-      executions: 0,
-    },
-  ]);
+  const { isConnected: isLitConnected } = useLitProtocol();
+  const [rules, setRules] = useState<Rule[]>([]);
+  const [ruleStats, setRuleStats] = useState<RuleStats | null>(null);
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newRule, setNewRule] = useState({
@@ -99,6 +72,31 @@ export default function RulesEngine() {
     chain: "",
     enabled: true,
   });
+
+  // Load rules and Lit Action templates on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        
+        // Load rules from rules engine
+        const allRules = getAllRules() as AirdropRule[];
+        setRules(allRules);
+
+        // Load Lit Action templates (for future use)
+        getAllLitActionTemplates();
+
+        // Load rule statistics
+        const stats = getRuleStats();
+        setRuleStats(stats);
+      } catch (error) {
+        console.error("Failed to load rules data:", error);
+      }
+    };
+
+    if (isLitConnected) {
+      loadData();
+    }
+  }, [isLitConnected]);
 
   const triggers = [
     { value: "new_airdrop", label: "New Airdrop Announced" },
@@ -126,35 +124,105 @@ export default function RulesEngine() {
   ];
 
   const handleCreateRule = () => {
-    const rule: Rule = {
-      id: Date.now().toString(),
-      ...newRule,
-      executions: 0,
-    };
-    setRules([...rules, rule]);
-    setNewRule({
-      name: "",
-      trigger: "",
-      condition: "",
-      action: "",
-      amount: "",
-      chain: "",
-      enabled: true,
-    });
-    setShowCreateForm(false);
+    try {
+      // Create rule using rules engine
+      const newRuleData = addRule({
+        name: newRule.name,
+        trigger: newRule.trigger as
+          | "new_airdrop"
+          | "price_threshold"
+          | "volume_spike"
+          | "time_based",
+        condition: newRule.condition,
+        action: newRule.action as
+          | "bridge"
+          | "swap"
+          | "stake"
+          | "bridge_and_swap"
+          | "interact_contract",
+        amount: newRule.amount,
+        chain: newRule.chain,
+        enabled: newRule.enabled,
+      });
+
+      // Update local state
+      setRules([...rules, newRuleData]);
+
+      // Reset form
+      setNewRule({
+        name: "",
+        trigger: "",
+        condition: "",
+        action: "",
+        amount: "",
+        chain: "",
+        enabled: true,
+      });
+      setShowCreateForm(false);
+
+      console.log("✅ Rule created:", newRuleData.name);
+    } catch (error) {
+      console.error("Failed to create rule:", error);
+      alert(
+        `Failed to create rule: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
   };
 
   const toggleRule = (id: string) => {
-    setRules(
-      rules.map((rule) =>
-        rule.id === id ? { ...rule, enabled: !rule.enabled } : rule
-      )
-    );
+    try {
+      const rule = rules.find((r) => r.id === id);
+      if (rule) {
+        // Update rule using rules engine
+        updateRule(id, { enabled: !rule.enabled });
+
+        // Update local state
+        setRules(
+          rules.map((r) => (r.id === id ? { ...r, enabled: !r.enabled } : r))
+        );
+      }
+    } catch (error) {
+      console.error("Failed to toggle rule:", error);
+    }
   };
 
-  const deleteRule = (id: string) => {
-    setRules(rules.filter((rule) => rule.id !== id));
+  const handleDeleteRule = (id: string) => {
+    try {
+      // Delete rule using rules engine
+      deleteRule(id);
+
+      // Update local state
+      setRules(rules.filter((rule) => rule.id !== id));
+
+      console.log("✅ Rule deleted:", id);
+    } catch (error) {
+      console.error("Failed to delete rule:", error);
+    }
   };
+
+  if (!isLitConnected) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center py-20">
+            <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold mb-4">Lit Protocol Required</h1>
+            <p className="text-gray-600 mb-6">
+              Lit Protocol is required for autonomous rule execution and Lit
+              Actions.
+            </p>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
+              <p className="text-sm text-yellow-800">
+                Please ensure Lit Protocol is properly configured and connected.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -165,9 +233,27 @@ export default function RulesEngine() {
               Rules Engine
             </h1>
             <p className="text-gray-600">
-              Configure your agent's automation rules. Set triggers and actions
-              for automatic airdrop farming.
+              Configure your agent&apos;s automation rules with Lit Actions. Set
+              triggers and actions for automatic airdrop farming.
             </p>
+            {ruleStats && (
+              <div className="flex items-center gap-4 mt-2">
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 text-green-700 border-green-200"
+                >
+                  <Shield className="w-3 h-3 mr-1" />
+                  {ruleStats.activeRules} Active Rules
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200"
+                >
+                  <Activity className="w-3 h-3 mr-1" />
+                  {ruleStats.totalExecutions} Executions
+                </Badge>
+              </div>
+            )}
           </div>
           <Button
             onClick={() => setShowCreateForm(true)}
@@ -368,7 +454,7 @@ export default function RulesEngine() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => deleteRule(rule.id)}
+                      onClick={() => handleDeleteRule(rule.id)}
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -406,6 +492,60 @@ export default function RulesEngine() {
                   <Label className="text-sm text-gray-500">Condition</Label>
                   <p className="font-mono text-sm">{rule.condition}</p>
                 </div>
+
+                {/* Lit Action Integration */}
+                {rule.litActionTemplateId && (
+                  <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Code className="w-4 h-4 text-blue-600" />
+                      <Label className="text-sm text-blue-700 font-medium">
+                        Lit Action Integration
+                      </Label>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-blue-600">Template:</span>
+                        <span className="ml-2 font-medium">
+                          {rule.litActionTemplateId}
+                        </span>
+                      </div>
+                      {rule.litActionIPFSCID && (
+                        <div>
+                          <span className="text-blue-600">IPFS CID:</span>
+                          <span className="ml-2 font-mono text-xs">
+                            {rule.litActionIPFSCID}
+                          </span>
+                        </div>
+                      )}
+                      {rule.litActionLastExecution && (
+                        <div>
+                          <span className="text-blue-600">Last Execution:</span>
+                          <span className="ml-2">
+                            {new Date(
+                              rule.litActionLastExecution?.timestamp ||
+                                Date.now()
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-blue-600">Status:</span>
+                        <Badge
+                          variant="outline"
+                          className={`ml-2 ${
+                            rule.litActionLastExecution?.success
+                              ? "bg-green-50 text-green-700 border-green-200"
+                              : "bg-red-50 text-red-700 border-red-200"
+                          }`}
+                        >
+                          {rule.litActionLastExecution?.success
+                            ? "Success"
+                            : "Failed"}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <div className="flex items-center gap-4">

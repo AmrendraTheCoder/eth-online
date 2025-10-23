@@ -3,24 +3,24 @@
 import { useState, useEffect } from "react";
 import { getLitConnectionStatus } from "../lib/lit-client";
 import { isSessionValid, getCurrentSessionSigs } from "../lib/lit-auth";
-import { 
-  createPKPWallet as createPKPWalletService, 
-  getPKPWallet, 
+import {
+  createPKPWallet as createPKPWalletService,
+  getPKPWallet,
   getAllPKPWallets,
   getPKPWalletBalance,
-  getPKPWalletStats
+  getPKPWalletStats,
 } from "../lib/pkp-wallet";
-import { 
+import {
   executeLitAction as executeLitActionService,
   getAllLitActionTemplates,
   getLitActionExecutionHistory,
-  getLitActionExecutionStats
+  getLitActionExecutionStats,
 } from "../lib/lit-actions-executor";
-import { 
+import {
   startLitMonitoring,
   stopLitMonitoring,
   getActiveOpportunities,
-  getMonitoringStats
+  getMonitoringStats,
 } from "../lib/airdrop-lit-monitor";
 
 interface PKPWallet {
@@ -54,18 +54,18 @@ export function useLitProtocol() {
     const initializeLit = async () => {
       try {
         console.log("🔄 Initializing Lit Protocol...");
-        
+
         // Check LIT connection status
         const status = getLitConnectionStatus();
         setConnectionStatus(status);
         setIsConnected(status.connected);
-        
+
         if (status.connected) {
           console.log("✅ Lit Protocol connected");
-          
+
           // Load existing PKP wallets
           await loadPKPWallets();
-          
+
           // Load Lit Action templates
           await loadLitActionTemplates();
         } else {
@@ -94,7 +94,7 @@ export function useLitProtocol() {
           status: primaryWallet.status,
           createdAt: primaryWallet.createdAt,
           funded: primaryWallet.funded,
-          balance: primaryWallet.balance
+          balance: primaryWallet.balance,
         });
       }
     } catch (error) {
@@ -106,12 +106,12 @@ export function useLitProtocol() {
   const loadLitActionTemplates = async () => {
     try {
       const templates = getAllLitActionTemplates();
-      const actions: LitAction[] = templates.map(template => ({
+      const actions: LitAction[] = templates.map((template) => ({
         id: template.id,
         name: template.name,
         code: template.code,
         status: "active" as const,
-        executions: 0
+        executions: 0,
       }));
       setLitActions(actions);
     } catch (error) {
@@ -125,7 +125,7 @@ export function useLitProtocol() {
 
     try {
       console.log("🔄 Creating PKP wallet...");
-      
+
       // Check session validity
       if (!isSessionValid()) {
         throw new Error("No valid LIT session. Please authenticate first.");
@@ -133,7 +133,7 @@ export function useLitProtocol() {
 
       // Create PKP wallet using real LIT SDK
       const result = await createPKPWalletService(name, initialFunds);
-      
+
       const newWallet: PKPWallet = {
         tokenId: result.pkp.tokenId,
         publicKey: result.pkp.publicKey,
@@ -141,12 +141,12 @@ export function useLitProtocol() {
         status: result.pkp.status,
         createdAt: result.pkp.createdAt,
         funded: result.pkp.funded,
-        balance: result.pkp.balance
+        balance: result.pkp.balance,
       };
 
       setPkpWallet(newWallet);
       console.log("✅ PKP wallet created:", newWallet.address);
-      
+
       return newWallet;
     } catch (error) {
       console.error("Failed to create PKP wallet:", error);
@@ -160,7 +160,7 @@ export function useLitProtocol() {
   const createLitAction = async (name: string, code: string) => {
     try {
       console.log("🔄 Creating Lit Action...");
-      
+
       // Check session validity
       if (!isSessionValid()) {
         throw new Error("No valid LIT session. Please authenticate first.");
@@ -178,7 +178,7 @@ export function useLitProtocol() {
 
       setLitActions((prev) => [...prev, newAction]);
       console.log("✅ Lit Action created:", newAction.name);
-      
+
       return newAction;
     } catch (error) {
       console.error("Failed to create Lit Action:", error);
@@ -190,14 +190,14 @@ export function useLitProtocol() {
   const executeLitAction = async (actionId: string, params: any) => {
     try {
       console.log("🔄 Executing Lit Action...");
-      
+
       // Check session validity
       if (!isSessionValid()) {
         throw new Error("No valid LIT session. Please authenticate first.");
       }
 
       // Find the action
-      const action = litActions.find(a => a.id === actionId);
+      const action = litActions.find((a) => a.id === actionId);
       if (!action) {
         throw new Error("Lit Action not found");
       }
@@ -219,12 +219,12 @@ export function useLitProtocol() {
       );
 
       console.log("✅ Lit Action executed:", result);
-      
+
       return {
         success: result.success,
         txHash: result.data?.txHash,
         data: result.data,
-        error: result.error
+        error: result.error,
       };
     } catch (error) {
       console.error("Failed to execute Lit Action:", error);
@@ -236,13 +236,13 @@ export function useLitProtocol() {
   const monitorAirdrops = async () => {
     try {
       console.log("🔄 Monitoring airdrop opportunities...");
-      
+
       // Start Lit-powered monitoring
       await startLitMonitoring();
-      
+
       // Get active opportunities
       const opportunities = getActiveOpportunities();
-      
+
       if (opportunities.length > 0) {
         // Return the first active opportunity
         const opportunity = opportunities[0];
@@ -278,16 +278,17 @@ export function useLitProtocol() {
       const executionStats = getLitActionExecutionStats();
       const monitoringStats = getMonitoringStats();
       const pkpStats = getPKPWalletStats();
-      
+
       return {
         totalExecutions: executionStats.total,
-        activeActions: litActions.filter((action) => action.status === "active").length,
+        activeActions: litActions.filter((action) => action.status === "active")
+          .length,
         successRate: executionStats.successRate,
         totalProfit: monitoringStats.totalCost, // Using total cost as proxy for profit
         uptime: `${executionStats.successRate.toFixed(1)}%`,
         pkpWallets: pkpStats.total,
         fundedWallets: pkpStats.funded,
-        totalBalance: pkpStats.totalBalance
+        totalBalance: pkpStats.totalBalance,
       };
     } catch (error) {
       console.error("Failed to get agent metrics:", error);
@@ -299,7 +300,7 @@ export function useLitProtocol() {
         uptime: "0%",
         pkpWallets: 0,
         fundedWallets: 0,
-        totalBalance: "0"
+        totalBalance: "0",
       };
     }
   };
@@ -307,7 +308,7 @@ export function useLitProtocol() {
   // Get PKP wallet balance
   const getPKPWalletBalance = async (chainId?: number) => {
     if (!pkpWallet) return "0";
-    
+
     try {
       const balance = await getPKPWalletBalance(pkpWallet.tokenId, chainId);
       return balance;

@@ -1,4 +1,3 @@
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { getLitClient } from "./lit-client";
 import { getCurrentSessionSigs, isSessionValid } from "./lit-auth";
 
@@ -29,15 +28,15 @@ export interface LitActionParameter {
   type: "string" | "number" | "boolean" | "object" | "array";
   required: boolean;
   description: string;
-  defaultValue?: any;
+  defaultValue?: string | number | boolean | object | Array<unknown>;
 }
 
 export interface LitActionExecution {
   id: string;
   templateId: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   status: "pending" | "running" | "completed" | "failed";
-  result?: any;
+  result?: unknown;
   error?: string;
   txHash?: string;
   gasUsed?: number;
@@ -49,7 +48,7 @@ export interface LitActionExecution {
 
 export interface LitActionResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   txHash?: string;
   gasUsed?: number;
@@ -298,7 +297,7 @@ class LitActionExecutor {
    */
   async executeLitAction(
     templateId: string,
-    parameters: Record<string, any>,
+    parameters: Record<string, unknown>,
     pkpTokenId?: string
   ): Promise<LitActionResult> {
     const startTime = Date.now();
@@ -350,7 +349,7 @@ class LitActionExecutor {
 
       const result = await litClient.executeJs({
         code: template.code,
-        authMethods: [sessionSigs],
+        sessionSigs: sessionSigs,
         jsParams: executionParams,
         ipfsId: undefined, // Use inline code
       });
@@ -399,8 +398,7 @@ class LitActionExecutor {
    */
   async executeCustomLitAction(
     code: string,
-    parameters: Record<string, any>,
-    pkpTokenId?: string
+    parameters: Record<string, unknown>
   ): Promise<LitActionResult> {
     const startTime = Date.now();
 
@@ -423,7 +421,7 @@ class LitActionExecutor {
       // Execute custom Lit Action
       const result = await litClient.executeJs({
         code,
-        authMethods: [sessionSigs],
+        sessionSigs: sessionSigs,
         jsParams: parameters,
         ipfsId: undefined,
       });
@@ -656,15 +654,14 @@ export const litActionExecutor = new LitActionExecutor();
 // Export convenience functions
 export const executeLitAction = (
   templateId: string,
-  parameters: Record<string, any>,
+  parameters: Record<string, unknown>,
   pkpTokenId?: string
 ) => litActionExecutor.executeLitAction(templateId, parameters, pkpTokenId);
 
 export const executeCustomLitAction = (
   code: string,
-  parameters: Record<string, any>,
-  pkpTokenId?: string
-) => litActionExecutor.executeCustomLitAction(code, parameters, pkpTokenId);
+  parameters: Record<string, unknown>
+) => litActionExecutor.executeCustomLitAction(code, parameters);
 
 export const getAllLitActionTemplates = () =>
   litActionExecutor.getAllTemplates();

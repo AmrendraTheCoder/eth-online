@@ -1,10 +1,10 @@
-import { rulesEngine, RuleExecutionContext } from './rules-engine';
-import { litActionExecutor } from './lit-actions-executor';
-import { getPKPWallet } from './pkp-wallet';
+import { rulesEngine, RuleExecutionContext } from "./rules-engine";
+import { litActionExecutor } from "./lit-actions-executor";
+import { getPKPWallet } from "./pkp-wallet";
 
 /**
  * Lit-Powered Airdrop Monitor
- * 
+ *
  * Upgrades airdrop-monitor.ts to use Lit Actions:
  * - Use Lit Actions for continuous monitoring
  * - Schedule periodic checks via Lit Actions cron-style execution
@@ -21,13 +21,13 @@ export interface AirdropOpportunity {
   requirements: string[];
   estimatedValue: string;
   deadline: string;
-  status: 'active' | 'expired' | 'completed';
-  difficulty: 'easy' | 'medium' | 'hard';
+  status: "active" | "expired" | "completed";
+  difficulty: "easy" | "medium" | "hard";
   gasCost: string;
   timeRequired: string;
   // Lit Action integration fields
   litActionExecutionId?: string;
-  litActionStatus?: 'pending' | 'running' | 'completed' | 'failed';
+  litActionStatus?: "pending" | "running" | "completed" | "failed";
   litActionResult?: any;
 }
 
@@ -67,8 +67,8 @@ class LitAirdropMonitor {
       intervalMs: 30000, // 30 seconds
       maxConcurrentExecutions: 5,
       retryAttempts: 3,
-      gasPriceThreshold: '50',
-      slippageThreshold: '0.5'
+      gasPriceThreshold: "50",
+      slippageThreshold: "0.5",
     };
 
     this.stats = {
@@ -78,9 +78,9 @@ class LitAirdropMonitor {
       successfulExecutions: 0,
       failedExecutions: 0,
       totalGasUsed: 0,
-      totalCost: '0',
+      totalCost: "0",
       averageExecutionTime: 0,
-      successRate: 0
+      successRate: 0,
     };
 
     this.initializeMockData();
@@ -92,60 +92,62 @@ class LitAirdropMonitor {
   private initializeMockData(): void {
     const mockOpportunities: AirdropOpportunity[] = [
       {
-        id: 'zk_sync_airdrop',
-        name: 'ZkSync Era Airdrop',
-        chain: 'zksync',
-        project: 'ZkSync',
+        id: "zk_sync_airdrop",
+        name: "ZkSync Era Airdrop",
+        chain: "zksync",
+        project: "ZkSync",
         requirements: [
-          'Bridge funds to ZkSync',
-          'Make 5+ swaps',
-          'Interact with 3+ protocols',
+          "Bridge funds to ZkSync",
+          "Make 5+ swaps",
+          "Interact with 3+ protocols",
         ],
-        estimatedValue: '$500-2000',
+        estimatedValue: "$500-2000",
         deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'active',
-        difficulty: 'medium',
-        gasCost: '$15-30',
-        timeRequired: '2-3 hours',
+        status: "active",
+        difficulty: "medium",
+        gasCost: "$15-30",
+        timeRequired: "2-3 hours",
       },
       {
-        id: 'layerzero_airdrop',
-        name: 'LayerZero Airdrop',
-        chain: 'arbitrum',
-        project: 'LayerZero',
+        id: "layerzero_airdrop",
+        name: "LayerZero Airdrop",
+        chain: "arbitrum",
+        project: "LayerZero",
         requirements: [
-          'Bridge funds via LayerZero',
-          'Use 3+ chains',
-          'Interact with Stargate',
+          "Bridge funds via LayerZero",
+          "Use 3+ chains",
+          "Interact with Stargate",
         ],
-        estimatedValue: '$1000-5000',
+        estimatedValue: "$1000-5000",
         deadline: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'active',
-        difficulty: 'hard',
-        gasCost: '$50-100',
-        timeRequired: '4-6 hours',
+        status: "active",
+        difficulty: "hard",
+        gasCost: "$50-100",
+        timeRequired: "4-6 hours",
       },
       {
-        id: 'starknet_airdrop',
-        name: 'Starknet Airdrop',
-        chain: 'starknet',
-        project: 'Starknet',
-        requirements: ['Bridge to Starknet', 'Use dApps', 'Hold tokens'],
-        estimatedValue: '$200-800',
+        id: "starknet_airdrop",
+        name: "Starknet Airdrop",
+        chain: "starknet",
+        project: "Starknet",
+        requirements: ["Bridge to Starknet", "Use dApps", "Hold tokens"],
+        estimatedValue: "$200-800",
         deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
-        status: 'active',
-        difficulty: 'easy',
-        gasCost: '$5-15',
-        timeRequired: '1-2 hours',
+        status: "active",
+        difficulty: "easy",
+        gasCost: "$5-15",
+        timeRequired: "1-2 hours",
       },
     ];
 
-    mockOpportunities.forEach(opp => {
+    mockOpportunities.forEach((opp) => {
       this.opportunities.set(opp.id, opp);
     });
 
     this.stats.totalOpportunities = mockOpportunities.length;
-    this.stats.activeOpportunities = mockOpportunities.filter(opp => opp.status === 'active').length;
+    this.stats.activeOpportunities = mockOpportunities.filter(
+      (opp) => opp.status === "active"
+    ).length;
   }
 
   /**
@@ -153,11 +155,11 @@ class LitAirdropMonitor {
    */
   async startMonitoring(): Promise<void> {
     if (this.isMonitoring) {
-      console.log('⚠️ Monitoring already started');
+      console.log("⚠️ Monitoring already started");
       return;
     }
 
-    console.log('🔄 Starting Lit-powered airdrop monitoring...');
+    console.log("🔄 Starting Lit-powered airdrop monitoring...");
     this.isMonitoring = true;
 
     // Start periodic monitoring
@@ -168,7 +170,7 @@ class LitAirdropMonitor {
     // Start execution queue processor
     this.startExecutionQueueProcessor();
 
-    console.log('✅ Lit-powered monitoring started');
+    console.log("✅ Lit-powered monitoring started");
   }
 
   /**
@@ -180,7 +182,7 @@ class LitAirdropMonitor {
       this.monitoringInterval = null;
     }
     this.isMonitoring = false;
-    console.log('⏹️ Lit-powered monitoring stopped');
+    console.log("⏹️ Lit-powered monitoring stopped");
   }
 
   /**
@@ -188,7 +190,7 @@ class LitAirdropMonitor {
    */
   private async performMonitoringCycle(): Promise<void> {
     try {
-      console.log('🔍 Performing monitoring cycle...');
+      console.log("🔍 Performing monitoring cycle...");
 
       // 1. Check for new airdrop opportunities
       await this.checkForNewOpportunities();
@@ -202,10 +204,9 @@ class LitAirdropMonitor {
       // 4. Process execution queue
       await this.processExecutionQueue();
 
-      console.log('✅ Monitoring cycle completed');
-
+      console.log("✅ Monitoring cycle completed");
     } catch (error) {
-      console.error('❌ Monitoring cycle failed:', error);
+      console.error("❌ Monitoring cycle failed:", error);
     }
   }
 
@@ -266,7 +267,7 @@ class LitAirdropMonitor {
 
       const result = await litActionExecutor.executeCustomLitAction(
         monitoringCode,
-        { sources: ['api1', 'api2', 'api3'] }
+        { sources: ["api1", "api2", "api3"] }
       );
 
       if (result.success && result.data?.newOpportunities) {
@@ -274,9 +275,8 @@ class LitAirdropMonitor {
           await this.addOpportunity(opportunity);
         }
       }
-
     } catch (error) {
-      console.error('❌ Failed to check for new opportunities:', error);
+      console.error("❌ Failed to check for new opportunities:", error);
     }
   }
 
@@ -285,11 +285,11 @@ class LitAirdropMonitor {
    */
   private async updateExistingOpportunities(): Promise<void> {
     for (const [id, opportunity] of this.opportunities) {
-      if (opportunity.status === 'active') {
+      if (opportunity.status === "active") {
         // Check if opportunity has expired
         const deadline = new Date(opportunity.deadline);
         if (deadline < new Date()) {
-          opportunity.status = 'expired';
+          opportunity.status = "expired";
           this.opportunities.set(id, opportunity);
           this.stats.activeOpportunities--;
         }
@@ -302,14 +302,17 @@ class LitAirdropMonitor {
    */
   private async matchOpportunitiesWithRules(): Promise<void> {
     const activeRules = rulesEngine.getActiveRules();
-    const activeOpportunities = Array.from(this.opportunities.values())
-      .filter(opp => opp.status === 'active');
+    const activeOpportunities = Array.from(this.opportunities.values()).filter(
+      (opp) => opp.status === "active"
+    );
 
     for (const opportunity of activeOpportunities) {
       for (const rule of activeRules) {
         if (this.opportunityMatchesRule(opportunity, rule)) {
-          console.log(`🎯 Opportunity matches rule: ${opportunity.name} -> ${rule.name}`);
-          
+          console.log(
+            `🎯 Opportunity matches rule: ${opportunity.name} -> ${rule.name}`
+          );
+
           // Add to execution queue
           this.addToExecutionQueue(opportunity, rule);
         }
@@ -320,28 +323,37 @@ class LitAirdropMonitor {
   /**
    * Check if opportunity matches rule
    */
-  private opportunityMatchesRule(opportunity: AirdropOpportunity, rule: any): boolean {
+  private opportunityMatchesRule(
+    opportunity: AirdropOpportunity,
+    rule: any
+  ): boolean {
     try {
       // Simple matching logic
       if (rule.condition.includes(`chain = '${opportunity.chain}'`)) {
         return true;
       }
-      
-      if (rule.condition.includes(`project = '${opportunity.project.toLowerCase()}'`)) {
+
+      if (
+        rule.condition.includes(
+          `project = '${opportunity.project.toLowerCase()}'`
+        )
+      ) {
         return true;
       }
-      
+
       // Check estimated value
       const valueMatch = rule.condition.match(/estimatedValue > (\d+)/);
       if (valueMatch) {
         const minValue = parseInt(valueMatch[1]);
-        const oppValue = parseFloat(opportunity.estimatedValue.replace(/[$,]/g, ''));
+        const oppValue = parseFloat(
+          opportunity.estimatedValue.replace(/[$,]/g, "")
+        );
         return oppValue > minValue;
       }
-      
+
       return false;
     } catch (error) {
-      console.error('❌ Error matching opportunity with rule:', error);
+      console.error("❌ Error matching opportunity with rule:", error);
       return false;
     }
   }
@@ -349,19 +361,22 @@ class LitAirdropMonitor {
   /**
    * Add opportunity to execution queue
    */
-  private addToExecutionQueue(opportunity: AirdropOpportunity, rule: any): void {
+  private addToExecutionQueue(
+    opportunity: AirdropOpportunity,
+    rule: any
+  ): void {
     const executionId = `exec_${opportunity.id}_${rule.id}_${Date.now()}`;
-    
+
     this.executionQueue.push(executionId);
-    
+
     // Store execution context
     const context: RuleExecutionContext = {
-      airdropOpportunity: opportunity
+      airdropOpportunity: opportunity,
     };
-    
+
     // Store in a way that can be retrieved later
     (this as any)[`context_${executionId}`] = { opportunity, rule, context };
-    
+
     console.log(`📋 Added to execution queue: ${executionId}`);
   }
 
@@ -379,7 +394,8 @@ class LitAirdropMonitor {
    */
   private async processExecutionQueue(): Promise<void> {
     if (this.executionQueue.length === 0) return;
-    if (this.activeExecutions.size >= this.config.maxConcurrentExecutions) return;
+    if (this.activeExecutions.size >= this.config.maxConcurrentExecutions)
+      return;
 
     const executionId = this.executionQueue.shift();
     if (!executionId) return;
@@ -391,7 +407,7 @@ class LitAirdropMonitor {
 
     try {
       console.log(`🔄 Processing execution: ${executionId}`);
-      
+
       // Execute rule with Lit Actions
       const result = await rulesEngine.executeRule(
         executionContext.rule.id,
@@ -411,21 +427,25 @@ class LitAirdropMonitor {
       }
 
       if (result.cost) {
-        this.stats.totalCost = (parseFloat(this.stats.totalCost) + parseFloat(result.cost)).toString();
+        this.stats.totalCost = (
+          parseFloat(this.stats.totalCost) + parseFloat(result.cost)
+        ).toString();
       }
 
       // Update opportunity status
       if (result.success) {
-        executionContext.opportunity.litActionStatus = 'completed';
+        executionContext.opportunity.litActionStatus = "completed";
         executionContext.opportunity.litActionResult = result;
       } else {
-        executionContext.opportunity.litActionStatus = 'failed';
+        executionContext.opportunity.litActionStatus = "failed";
       }
 
-      this.opportunities.set(executionContext.opportunity.id, executionContext.opportunity);
+      this.opportunities.set(
+        executionContext.opportunity.id,
+        executionContext.opportunity
+      );
 
       console.log(`✅ Execution completed: ${executionId}`);
-
     } catch (error) {
       console.error(`❌ Execution failed: ${executionId}`, error);
       this.stats.failedExecutions++;
@@ -442,7 +462,7 @@ class LitAirdropMonitor {
     this.opportunities.set(opportunity.id, opportunity);
     this.stats.totalOpportunities++;
     this.stats.activeOpportunities++;
-    
+
     console.log(`✅ Added new opportunity: ${opportunity.name}`);
   }
 
@@ -457,7 +477,9 @@ class LitAirdropMonitor {
    * Get active opportunities
    */
   getActiveOpportunities(): AirdropOpportunity[] {
-    return Array.from(this.opportunities.values()).filter(opp => opp.status === 'active');
+    return Array.from(this.opportunities.values()).filter(
+      (opp) => opp.status === "active"
+    );
   }
 
   /**
@@ -479,16 +501,20 @@ class LitAirdropMonitor {
    */
   updateConfig(updates: Partial<MonitoringConfig>): void {
     this.config = { ...this.config, ...updates };
-    console.log('✅ Monitoring configuration updated');
+    console.log("✅ Monitoring configuration updated");
   }
 
   /**
    * Get monitoring statistics
    */
   getStats(): MonitoringStats {
-    const totalExecutions = this.stats.successfulExecutions + this.stats.failedExecutions;
-    this.stats.successRate = totalExecutions > 0 ? (this.stats.successfulExecutions / totalExecutions) * 100 : 0;
-    
+    const totalExecutions =
+      this.stats.successfulExecutions + this.stats.failedExecutions;
+    this.stats.successRate =
+      totalExecutions > 0
+        ? (this.stats.successfulExecutions / totalExecutions) * 100
+        : 0;
+
     return { ...this.stats };
   }
 
@@ -503,13 +529,13 @@ class LitAirdropMonitor {
     activeExecutions: number;
   } {
     const activeRules = rulesEngine.getActiveRules();
-    
+
     return {
       isMonitoring: this.isMonitoring,
       opportunitiesCount: this.opportunities.size,
       activeRulesCount: activeRules.length,
       executionQueueLength: this.executionQueue.length,
-      activeExecutions: this.activeExecutions.size
+      activeExecutions: this.activeExecutions.size,
     };
   }
 
@@ -527,11 +553,11 @@ class LitAirdropMonitor {
       successfulExecutions: 0,
       failedExecutions: 0,
       totalGasUsed: 0,
-      totalCost: '0',
+      totalCost: "0",
       averageExecutionTime: 0,
-      successRate: 0
+      successRate: 0,
     };
-    console.log('🧹 All monitoring data cleared');
+    console.log("🧹 All monitoring data cleared");
   }
 }
 
@@ -541,12 +567,18 @@ export const litAirdropMonitor = new LitAirdropMonitor();
 // Export convenience functions
 export const startLitMonitoring = () => litAirdropMonitor.startMonitoring();
 export const stopLitMonitoring = () => litAirdropMonitor.stopMonitoring();
-export const getAllOpportunities = () => litAirdropMonitor.getAllOpportunities();
-export const getActiveOpportunities = () => litAirdropMonitor.getActiveOpportunities();
-export const getOpportunity = (id: string) => litAirdropMonitor.getOpportunity(id);
-export const addOpportunity = (opportunity: AirdropOpportunity) => litAirdropMonitor.addOpportunity(opportunity);
+export const getAllOpportunities = () =>
+  litAirdropMonitor.getAllOpportunities();
+export const getActiveOpportunities = () =>
+  litAirdropMonitor.getActiveOpportunities();
+export const getOpportunity = (id: string) =>
+  litAirdropMonitor.getOpportunity(id);
+export const addOpportunity = (opportunity: AirdropOpportunity) =>
+  litAirdropMonitor.addOpportunity(opportunity);
 export const getMonitoringConfig = () => litAirdropMonitor.getConfig();
-export const updateMonitoringConfig = (updates: Partial<MonitoringConfig>) => litAirdropMonitor.updateConfig(updates);
+export const updateMonitoringConfig = (updates: Partial<MonitoringConfig>) =>
+  litAirdropMonitor.updateConfig(updates);
 export const getMonitoringStats = () => litAirdropMonitor.getStats();
-export const getMonitoringStatus = () => litAirdropMonitor.getMonitoringStatus();
+export const getMonitoringStatus = () =>
+  litAirdropMonitor.getMonitoringStatus();
 export const clearMonitoringData = () => litAirdropMonitor.clearAllData();
