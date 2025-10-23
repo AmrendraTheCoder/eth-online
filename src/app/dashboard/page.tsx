@@ -28,8 +28,8 @@ import {
   Pause,
   RotateCcw,
 } from "lucide-react";
-import { ConnectWallet } from "@/components/Auth/ConnectWallet";
 import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function DashboardPage() {
   const { address, isConnected } = useAccount();
@@ -137,7 +137,7 @@ export default function DashboardPage() {
   if (!isConnected) {
     return (
       <div className="container mx-auto px-4 py-20">
-        <ConnectWallet />
+        <ConnectButton />
       </div>
     );
   }

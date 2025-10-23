@@ -22,6 +22,7 @@ import {
   BookOpen,
   HelpCircle,
   CheckCircle,
+  Key,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -419,31 +420,43 @@ export function Navbar() {
             <div className="container mx-auto px-4 py-4 space-y-2">
               <Link
                 href="/agent/create"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                className="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all duration-300 hover:scale-105 group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Create Agent
+                <div className="flex items-center gap-3">
+                  <Bot className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                  Create Agent
+                </div>
               </Link>
               <Link
                 href="/dashboard"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-300 hover:scale-105 group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Dashboard
+                <div className="flex items-center gap-3">
+                  <Target className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                  Dashboard
+                </div>
               </Link>
               <Link
                 href="/rules"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                className="block px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-300 hover:scale-105 group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Rules
+                <div className="flex items-center gap-3">
+                  <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
+                  Rules
+                </div>
               </Link>
               <Link
                 href="/activity"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                className="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-300 hover:scale-105 group"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Activity
+                <div className="flex items-center gap-3">
+                  <Activity className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                  Activity
+                </div>
               </Link>
               <div className="pt-4">
                 <ConnectButton />

@@ -357,61 +357,72 @@ export default function Home() {
             {/* Three Main Feature Cards */}
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/10 hover:scale-105 hover:shadow-xl ${
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: "1000ms" }}
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Bot className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg group-hover:shadow-purple-500/30">
+                  <Bot className="w-7 h-7 text-white group-hover:animate-bounce" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-200 transition-colors">
                   Create Agent
                 </h3>
-                <p className="text-gray-300 text-left">
+                <p className="text-gray-300 text-left group-hover:text-white transition-colors">
                   Create your Agent Wallet using Lit Protocol PKP. This separate
                   wallet will do all the farming work.
                 </p>
+                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-full h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
+                </div>
               </div>
 
               <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/10 hover:scale-105 hover:shadow-xl ${
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: "1200ms" }}
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Settings className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg group-hover:shadow-blue-500/30">
+                  <Settings className="w-7 h-7 text-white group-hover:animate-spin" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-200 transition-colors">
                   Set Rules
                 </h3>
-                <p className="text-gray-300 text-left">
+                <p className="text-gray-300 text-left group-hover:text-white transition-colors">
                   Configure your 'if-this-then-that' rules. Define triggers,
                   amounts, and actions for automatic execution.
                 </p>
+                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></div>
+                </div>
               </div>
 
               <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/10 hover:scale-105 hover:shadow-xl ${
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: "1400ms" }}
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Activity className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg group-hover:shadow-green-500/30">
+                  <Activity className="w-7 h-7 text-white group-hover:animate-pulse" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Automate</h3>
-                <p className="text-gray-300 text-left">
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-green-200 transition-colors">
+                  Automate
+                </h3>
+                <p className="text-gray-300 text-left group-hover:text-white transition-colors">
                   Watch your agent work 24/7, farming airdrops and building your
                   crypto portfolio automatically.
                 </p>
+                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-full h-1 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"></div>
+                </div>
               </div>
             </div>
           </div>
