@@ -7,21 +7,10 @@ import {
   Zap,
   Target,
   ArrowRight,
-  Users,
-  Coins,
-  FileCheck,
-  Database,
   Network,
   Sparkles,
-  ShieldCheck,
   Settings,
   Activity,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  Play,
-  Pause,
-  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -460,26 +449,37 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-24 relative overflow-hidden">
+        {/* Unified Flowing Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(168,85,247,0.1),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.1),transparent_50%)]"></div>
+        
+        {/* Animated floating elements */}
+        <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full animate-floating"></div>
+        <div className="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-200/30 to-cyan-200/30 rounded-full animate-floating" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full animate-floating" style={{animationDelay: '2s'}}></div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16" ref={featuresRef}>
               <div
-                className={`inline-block bg-purple-100 text-purple-600 px-4 py-2 rounded-full text-sm font-medium mb-4 transition-all duration-1000 ${
+                className={`inline-block bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-6 py-3 rounded-full text-sm font-medium mb-6 transition-all duration-1000 border border-purple-200/50 backdrop-blur-sm ${
                   featuresVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 translate-y-8 scale-95"
                 }`}
               >
                 ✨ Features
               </div>
               <AnimatedText
                 text="Why NIMBUS is Different"
-                className="text-4xl lg:text-5xl font-bold mb-6"
+                className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent"
                 delay={100}
               />
               <p
-                className={`text-xl text-gray-600 max-w-3xl mx-auto transition-all duration-1000 ${
+                className={`text-xl text-gray-700 max-w-3xl mx-auto transition-all duration-1000 leading-relaxed ${
                   featuresVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -491,28 +491,28 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature, index) => (
                 <Card
                   key={index}
-                  className={`hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-purple-300 group overflow-hidden relative ${
+                  className={`hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-purple-200/50 group overflow-hidden relative bg-white/80 backdrop-blur-sm ${
                     featuresVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-12"
                   }`}
                   style={{ transitionDelay: `${400 + index * 100}ms` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-pink-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <CardHeader className="relative z-10">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <feature.icon className="h-7 w-7 text-white" />
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
+                      <feature.icon className="h-8 w-8 text-white" />
                     </div>
-                    <CardTitle className="group-hover:text-purple-600 transition-colors">
+                    <CardTitle className="group-hover:text-purple-600 transition-colors text-xl">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="relative z-10">
-                    <CardDescription className="text-base">
+                    <CardDescription className="text-base text-gray-600 leading-relaxed">
                       {feature.description}
                     </CardDescription>
                   </CardContent>
@@ -523,27 +523,92 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Seamless gradient transition from features section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(168,85,247,0.15),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(236,72,153,0.15),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15),transparent_60%)]"></div>
+        
+        {/* Enhanced floating elements */}
+        <div className="absolute top-10 left-1/4 w-32 h-32 bg-gradient-to-br from-purple-300/20 to-pink-300/20 rounded-full animate-pulse-glow"></div>
+        <div className="absolute top-32 right-1/3 w-24 h-24 bg-gradient-to-br from-blue-300/20 to-cyan-300/20 rounded-full animate-pulse-glow" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute bottom-32 left-1/2 w-28 h-28 bg-gradient-to-br from-pink-300/20 to-purple-300/20 rounded-full animate-pulse-glow" style={{animationDelay: '3s'}}></div>
+
+        <div className="container mx-auto px-4 text-center space-y-8 relative z-10">
+          <div className="inline-block bg-gradient-to-r from-purple-200/80 to-pink-200/80 backdrop-blur-sm text-purple-800 px-6 py-3 rounded-full text-sm font-medium mb-6 border border-purple-300/50 shadow-lg">
+            🚀 Get Started Today
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-bold max-w-4xl mx-auto bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent leading-tight">
+            Ready to Start Automated Airdrop Farming?
+          </h2>
+
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+            Join thousands of users who are farming airdrops 24/7 with NIMBUS.
+            No setup fees, complete automation, and maximum profits guaranteed.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+            <Link href="/dashboard">
+              <Button
+                size="lg"
+                className="group bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500 shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-bold text-lg px-10 py-6 rounded-2xl border border-purple-400/30"
+              >
+                <Bot className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                Create Your Agent
+                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+              </Button>
+            </Link>
+
+            <Link href="/activity">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-white/80 backdrop-blur-sm border-2 border-purple-300 text-purple-700 hover:bg-purple-50 hover:border-purple-400 font-bold text-lg px-10 py-6 rounded-2xl transition-all duration-300 hover:scale-105 shadow-lg"
+              >
+                <Activity className="w-6 h-6 mr-3" />
+                View Activity
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 relative overflow-hidden">
+        {/* Continuation of the flowing gradient theme */}
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_10%,rgba(236,72,153,0.1),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_90%,rgba(168,85,247,0.1),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_40%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+        
+        {/* Coordinated floating elements */}
+        <div className="absolute top-16 right-10 w-20 h-20 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full animate-floating"></div>
+        <div className="absolute top-48 left-20 w-16 h-16 bg-gradient-to-br from-purple-200/30 to-blue-200/30 rounded-full animate-floating" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-24 right-1/3 w-24 h-24 bg-gradient-to-br from-blue-200/30 to-pink-200/30 rounded-full animate-floating" style={{animationDelay: '4s'}}></div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16" ref={howItWorksRef}>
               <div
-                className={`inline-block bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-4 transition-all duration-1000 ${
+                className={`inline-block bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 px-6 py-3 rounded-full text-sm font-medium mb-6 transition-all duration-1000 border border-blue-200/50 backdrop-blur-sm ${
                   howItWorksVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 translate-y-8 scale-95"
                 }`}
               >
                 💡 How It Works
               </div>
               <AnimatedText
                 text="Simple Steps to Automated Farming"
-                className="text-4xl lg:text-5xl font-bold mb-6"
+                className="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
                 delay={100}
               />
               <p
-                className={`text-xl text-gray-600 max-w-3xl mx-auto transition-all duration-1000 ${
+                className={`text-xl text-gray-700 max-w-3xl mx-auto transition-all duration-1000 leading-relaxed font-medium ${
                   howItWorksVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -558,71 +623,26 @@ export default function Home() {
               {howItWorksSteps.map((step, index) => (
                 <div
                   key={index}
-                  className={`text-center transition-all duration-1000 ${
+                  className={`text-center transition-all duration-1000 group ${
                     howItWorksVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-12"
                   }`}
                   style={{ transitionDelay: `${400 + index * 150}ms` }}
                 >
-                  <div className="relative mb-6">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-lg">
-                      <step.icon className="h-10 w-10 text-white" />
+                  <div className="relative mb-8 group-hover:scale-105 transition-transform duration-300">
+                    <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center mx-auto group-hover:rotate-6 transition-all duration-300 shadow-xl group-hover:shadow-2xl">
+                      <step.icon className="h-12 w-12 text-white" />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-lg">
+                    <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white flex items-center justify-center font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
                       {index + 1}
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-800 group-hover:text-purple-600 transition-colors">{step.title}</h3>
+                  <p className="text-gray-600 text-base leading-relaxed group-hover:text-gray-700 transition-colors">{step.description}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 animate-gradient bg-[length:200%_200%]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-
-        <div className="container mx-auto px-4 text-center space-y-8 relative z-10">
-          <div className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
-            🚀 Get Started Today
-          </div>
-
-          <h2 className="text-4xl md:text-6xl font-bold text-white max-w-4xl mx-auto">
-            Ready to Start Automated Airdrop Farming?
-          </h2>
-
-          <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of users who are farming airdrops 24/7 with NIMBUS.
-            No setup fees, complete automation, and maximum profits guaranteed.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link href="/dashboard">
-              <Button
-                size="lg"
-                className="bg-white text-purple-600 hover:bg-gray-100 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 font-bold text-lg px-8 py-6"
-              >
-                <Bot className="w-6 h-6 mr-2" />
-                Create Your Agent
-                <ArrowRight className="w-6 h-6 ml-2" />
-              </Button>
-            </Link>
-
-            <Link href="/activity">
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold text-lg px-8 py-6"
-              >
-                <Activity className="w-6 h-6 mr-2" />
-                View Activity
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
