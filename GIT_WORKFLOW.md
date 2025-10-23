@@ -1,7 +1,9 @@
 # Git Workflow Guide for NIMBUS - DropPilot
 
 ## 🚀 **Current Status**
+
 ✅ **Repository synchronized successfully!**
+
 - Local and remote branches are now in sync
 - All your recent changes have been pushed to GitHub
 - Ready for collaborative development
@@ -9,6 +11,7 @@
 ## 📋 **Daily Git Workflow**
 
 ### **Before Starting Work (Always Pull First)**
+
 ```bash
 # 1. Check current status
 git status
@@ -21,6 +24,7 @@ git branch
 ```
 
 ### **During Development**
+
 ```bash
 # 1. Check what files have changed
 git status
@@ -40,6 +44,7 @@ git push origin main
 ```
 
 ### **Best Practices for Commits**
+
 ```bash
 # Good commit messages:
 git commit -m "Fix: Resolve TypeScript any type errors in security module"
@@ -56,6 +61,7 @@ git commit -m "changes"
 ## 🔄 **Collaborative Workflow**
 
 ### **When Working with Team Members**
+
 ```bash
 # 1. Always start with pull
 git pull origin main
@@ -71,6 +77,7 @@ git push origin main
 ```
 
 ### **Branch Strategy (Optional)**
+
 ```bash
 # For major features, create feature branches:
 git checkout -b feature/lit-protocol-integration
@@ -89,6 +96,7 @@ git push origin main
 ## 🛠️ **Troubleshooting Common Issues**
 
 ### **Issue: "Your branch and 'origin/main' have diverged"**
+
 ```bash
 # Solution 1: Rebase (recommended)
 git pull origin main --rebase
@@ -101,6 +109,7 @@ git push origin main
 ```
 
 ### **Issue: "Updates were rejected because the remote contains work"**
+
 ```bash
 # Pull first, then push
 git pull origin main
@@ -108,6 +117,7 @@ git push origin main
 ```
 
 ### **Issue: "Please commit your changes or stash them"**
+
 ```bash
 # Option 1: Commit changes
 git add .
@@ -123,6 +133,7 @@ git stash pop
 ## 📊 **Useful Git Commands**
 
 ### **Check Repository Status**
+
 ```bash
 # See current status
 git status
@@ -138,6 +149,7 @@ git diff --cached
 ```
 
 ### **Undo Changes**
+
 ```bash
 # Undo last commit (keep changes)
 git reset --soft HEAD~1
@@ -150,6 +162,7 @@ git checkout -- src/lib/security.ts
 ```
 
 ### **Clean Up**
+
 ```bash
 # Remove untracked files
 git clean -fd
@@ -164,6 +177,7 @@ git clean -n
 ## 🚨 **Emergency Procedures**
 
 ### **If You Accidentally Push Wrong Changes**
+
 ```bash
 # 1. Revert the commit
 git revert <commit-hash>
@@ -173,6 +187,7 @@ git push origin main
 ```
 
 ### **If You Need to Force Push (Use with Caution)**
+
 ```bash
 # Only use if you're sure no one else is working on the repo
 git push origin main --force
@@ -181,6 +196,7 @@ git push origin main --force
 ## 📝 **Commit Message Convention**
 
 ### **Format:**
+
 ```
 <type>(<scope>): <description>
 
@@ -190,6 +206,7 @@ git push origin main --force
 ```
 
 ### **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -199,6 +216,7 @@ git push origin main --force
 - `chore`: Maintenance tasks
 
 ### **Examples:**
+
 ```bash
 git commit -m "feat(lit-protocol): Add PKP wallet creation functionality"
 git commit -m "fix(security): Resolve TypeScript any type errors"
@@ -209,6 +227,7 @@ git commit -m "refactor(rules): Improve rule execution performance"
 ## 🔐 **Security Best Practices**
 
 ### **Never Commit Sensitive Data**
+
 ```bash
 # Add to .gitignore
 echo ".env.local" >> .gitignore
@@ -222,6 +241,7 @@ git filter-branch --force --index-filter \
 ```
 
 ### **Regular Maintenance**
+
 ```bash
 # Clean up merged branches
 git branch --merged | grep -v main | xargs -n 1 git branch -d
@@ -236,6 +256,7 @@ du -sh .git
 ## 🎯 **Quick Reference**
 
 ### **Daily Workflow:**
+
 1. `git pull origin main`
 2. Make changes
 3. `git add .`
@@ -243,23 +264,27 @@ du -sh .git
 5. `git push origin main`
 
 ### **Weekly Maintenance:**
+
 1. `git log --oneline -20` (review recent commits)
 2. `git status` (check for uncommitted changes)
 3. `git remote -v` (verify remote URLs)
 
 ### **Before Major Releases:**
+
 1. `git tag -a v1.0.0 -m "Release version 1.0.0"`
 2. `git push origin v1.0.0`
 
 ---
 
 ## ✅ **Current Repository Status**
+
 - **Remote URL:** https://github.com/AmrendraTheCoder/eth-online
 - **Branch:** main
 - **Status:** Up to date with remote
 - **Last Push:** Successful ✅
 
 ## 🚀 **Next Steps**
+
 1. Always pull before starting work: `git pull origin main`
 2. Make your changes
 3. Commit with descriptive messages
