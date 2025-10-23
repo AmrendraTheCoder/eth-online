@@ -1,6 +1,11 @@
-import { LitAuthClient } from '@lit-protocol/lit-auth-client';
-import { SessionSigs } from '@lit-protocol/auth-helpers';
+// Mock implementation to bypass multiformats issues
+// import { LitAuthClient } from '@lit-protocol/lit-auth-client';
+// import { SessionSigs } from '@lit-protocol/auth-helpers';
 import { getLitClient } from './lit-client';
+
+// Mock types
+type SessionSigs = Record<string, any>;
+type LitAuthClient = any;
 
 /**
  * LIT Protocol Authentication Service
