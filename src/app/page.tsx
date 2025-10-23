@@ -297,14 +297,14 @@ export default function Home() {
 
             {/* Main Headline */}
             <AnimatedText
-              text="Set It and Forget It"
-              className={`text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight transition-all duration-1200 ease-out ${
-                isLoaded
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-8"
+            text="Never Miss an Airdrop Again"
+            className={`text-5xl lg:text-7xl font-extrabold text-white mb-8 leading-[1.1] tracking-tight transition-all duration-1200 ease-out ${
+              isLoaded
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
               }`}
               delay={200}
-            />
+/>
 
             {/* Subtitle */}
             <p
