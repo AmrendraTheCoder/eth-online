@@ -63,15 +63,15 @@ export function Navbar() {
             {/* Left: Logo */}
             <div className="flex items-center">
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300 shadow-md">
+                {/* <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300 shadow-md">
                   <Bot className="w-6 h-6 text-white" />
-                </div>
+                </div> */}
                 <span className="text-xl font-bold text-gray-900">NIMBUS</span>
               </Link>
             </div>
 
             {/* Center: Navigation */}
-            <div className="hidden lg:flex items-center space-x-12">
+            {/* <div className="hidden lg:flex items-center space-x-12">
               <div className="hidden lg:flex items-center space-x-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -350,7 +350,7 @@ export function Navbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            </div>
+            </div> */}
 
             {/* Right side actions */}
             <div className="flex items-center gap-3">

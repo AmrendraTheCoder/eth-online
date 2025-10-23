@@ -52,11 +52,23 @@ export default function CreateAgent() {
   const handleCreateAgent = async () => {
     setIsCreating(true);
 
-    // Simulate agent creation process
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    setAgentCreated(true);
-    setIsCreating(false);
+    try {
+      // Import the useLitProtocol hook
+      const { createPKPWallet } = await import("@/hooks/useLitProtocol");
+      
+      // Create PKP wallet using real LIT Protocol
+      const pkpWallet = await createPKPWallet(agentData.name, agentData.initialFunds);
+      
+      console.log("✅ PKP wallet created:", pkpWallet);
+      
+      setAgentCreated(true);
+    } catch (error) {
+      console.error("❌ Failed to create PKP wallet:", error);
+      // Handle error - you might want to show an error message to the user
+      alert(`Failed to create agent: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   if (agentCreated) {
@@ -94,13 +106,25 @@ export default function CreateAgent() {
                   <div>
                     <span className="text-gray-500">Wallet Address:</span>
                     <span className="ml-2 font-mono text-xs">
-                      0x742d...8f3a
+                      {agentData.name} PKP Wallet
                     </span>
                   </div>
                   <div>
                     <span className="text-gray-500">Initial Funds:</span>
                     <span className="ml-2 font-medium">
                       {agentData.initialFunds} ETH
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">PKP Status:</span>
+                    <span className="ml-2 text-green-600 font-medium">
+                      Ready for Automation
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Security:</span>
+                    <span className="ml-2 text-blue-600 font-medium">
+                      Lit Protocol TEE
                     </span>
                   </div>
                 </div>
