@@ -356,8 +356,8 @@ export default function Home() {
 
             {/* Three Main Feature Cards */}
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer ${
+            <div
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer text-left ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -380,7 +380,7 @@ export default function Home() {
               </div>
 
               <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer ${
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer text-left ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -403,7 +403,7 @@ export default function Home() {
               </div>
 
               <div
-                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer ${
+                className={`group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/30 transition-all duration-500 hover:bg-white/15 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer text-left ${
                   isLoaded
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
