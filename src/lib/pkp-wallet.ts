@@ -1,6 +1,6 @@
 // import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
-import { getLitClient } from "./lit-client";
+// import { getLitClient } from "./lit-client";
 import { getCurrentSessionSigs, isSessionValid } from "./lit-auth";
 
 /**
@@ -125,7 +125,7 @@ class PKPWalletManager {
   async fundPKPWallet(
     tokenId: string,
     amount: string,
-    fromAddress?: string
+    _fromAddress?: string
   ): Promise<{ txHash: string; cost: string }> {
     try {
       const pkpWallet = this.pkpWallets.get(tokenId);
@@ -197,7 +197,7 @@ class PKPWalletManager {
    */
   async getPKPWalletBalance(
     tokenId: string,
-    chainId?: number
+    _chainId?: number
   ): Promise<string> {
     try {
       const pkpWallet = this.pkpWallets.get(tokenId);

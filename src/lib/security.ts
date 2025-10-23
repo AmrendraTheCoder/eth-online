@@ -1,5 +1,4 @@
-import { getCurrentSessionSigs, isSessionValid } from "./lit-auth";
-import { getPKPWallet } from "./pkp-wallet";
+import { isSessionValid } from "./lit-auth";
 
 /**
  * Security Module for PKP Permissions and Lit Action Safety
@@ -244,7 +243,8 @@ class SecurityManager {
     // Check transaction value
     if (
       parameters.amount &&
-      parseFloat(parameters.amount as string) > parseFloat(policy.maxTransactionValue)
+      parseFloat(parameters.amount as string) >
+        parseFloat(policy.maxTransactionValue)
     ) {
       errors.push(
         `Transaction amount ${parameters.amount} exceeds limit ${policy.maxTransactionValue}`
@@ -442,11 +442,11 @@ class SecurityManager {
     }
 
     // Additional safety checks
-    if (parameters.amount && parseFloat(parameters.amount) > 0.1) {
+    if (parameters.amount && parseFloat(parameters.amount as string) > 0.1) {
       warnings.push("High value transaction detected");
     }
 
-    if (parameters.gasPrice && parseFloat(parameters.gasPrice) > 50) {
+    if (parameters.gasPrice && parseFloat(parameters.gasPrice as string) > 50) {
       warnings.push("High gas price detected");
     }
 
@@ -490,7 +490,7 @@ export const getSecurityPolicy = (policyId: string) =>
 export const getAllSecurityPolicies = () => securityManager.getAllPolicies();
 export const validateLitActionParameters = (
   actionId: string,
-  parameters: Record<string, any>,
+  parameters: Record<string, unknown>,
   policyId?: string
 ) =>
   securityManager.validateLitActionParameters(actionId, parameters, policyId);
@@ -508,7 +508,7 @@ export const resolveSecurityEvent = (eventId: string) =>
 export const getSecurityStats = () => securityManager.getSecurityStats();
 export const isLitActionSafe = (
   actionId: string,
-  parameters: Record<string, any>,
+  parameters: Record<string, unknown>,
   pkpTokenId: string
 ) => securityManager.isLitActionSafe(actionId, parameters, pkpTokenId);
 export const clearAllSecurityData = () =>
