@@ -1,24 +1,24 @@
-# ChainID - Decentralized Digital Identity
+# NIMBUS - DropPilot Airdrop Automation
 
-ChainID is a privacy-preserving, decentralized digital identity system - the Web3 alternative to traditional identity management like Aadhaar.
+NIMBUS (DropPilot) is a "set it and forget it" dashboard that automatically farms crypto airdrops for you. You set the rules, and a smart robot (your Agent) goes out and performs the tasks—like bridging, swapping, and staking—to make your wallet eligible for future rewards.
 
 ## Features
 
-- **Privacy-First Encryption**: Data encrypted with Lit Protocol
-- **Decentralized Storage**: IPFS-based storage
-- **NFT-Based Identity**: Hedera blockchain NFTs
-- **Zero-Knowledge Proofs**: Verify without revealing data
-- **Gasless Verification**: No transaction fees for users
-- **Cross-Chain Compatible**: Multi-blockchain support
+- **Agent Wallet Creation**: Create separate PKP wallets for automated airdrop farming
+- **Rules Engine**: Set "if-this-then-that" rules for automatic airdrop participation
+- **24/7 Automation**: Lit Protocol-powered agents that work around the clock
+- **Multi-Chain Support**: Farm airdrops across Ethereum, Polygon, Arbitrum, and more
+- **Smart Monitoring**: Real-time tracking of airdrop opportunities and agent activity
+- **Gas Optimization**: Intelligent transaction batching and fee management
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, React, TailwindCSS
-- **Wallet**: RainbowKit, Wagmi
-- **Encryption**: Lit Protocol
-- **Storage**: IPFS
-- **Blockchain**: Hedera, Ethereum, Polygon
+- **Frontend**: Next.js 15, React, TailwindCSS
+- **Wallet**: RainbowKit, Wagmi, MetaMask
+- **Automation**: Lit Protocol (PKP + Lit Actions)
+- **Blockchain**: Ethereum, Polygon, Arbitrum, Optimism, BSC
 - **Components**: shadcn/ui, Radix UI
+- **Data**: Airdrop APIs, Real-time monitoring
 
 ## Getting Started
 
@@ -60,9 +60,10 @@ src/
 ## Key Pages
 
 - `/` - Homepage
-- `/register` - Create Identity
-- `/dashboard` - User Dashboard
-- `/verify` - Verify Credentials
+- `/dashboard` - Agent Dashboard
+- `/agent/create` - Create Agent Wallet
+- `/rules` - Rules Engine
+- `/activity` - Agent Activity Feed
 
 ## License
 

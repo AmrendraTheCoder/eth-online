@@ -3,18 +3,25 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
-  Shield,
-  Lock,
-  Eye,
-  CheckCircle,
+  Bot,
+  Zap,
+  Target,
   ArrowRight,
   Users,
-  Zap,
+  Coins,
   FileCheck,
   Database,
   Network,
   Sparkles,
   ShieldCheck,
+  Settings,
+  Activity,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  Play,
+  Pause,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -169,79 +176,81 @@ export default function Home() {
 
   const features = [
     {
-      icon: Lock,
-      title: "Privacy-First Encryption",
+      icon: Bot,
+      title: "Agent Wallet Creation",
       description:
-        "Your identity data is encrypted using Lit Protocol before storage. Only you control access through cryptographic keys.",
+        "Create separate PKP wallets that work independently. Your main wallet stays safe while agents do the farming.",
       color: "purple",
     },
     {
-      icon: Database,
-      title: "Decentralized Storage",
+      icon: Settings,
+      title: "Rules Engine",
       description:
-        "Data stored on IPFS ensures no single point of failure. Your identity lives on a distributed network, not corporate servers.",
+        "Set 'if-this-then-that' rules for automatic airdrop participation. When ZkSync announces an airdrop, bridge $20 automatically.",
       color: "blue",
     },
     {
-      icon: ShieldCheck,
-      title: "NFT-Based Identity",
+      icon: Activity,
+      title: "24/7 Automation",
       description:
-        "Your identity is minted as an NFT on Hedera, providing immutable proof of ownership and verifiable credentials.",
+        "Lit Protocol-powered agents work around the clock, monitoring for new airdrops and executing your rules automatically.",
       color: "green",
     },
     {
-      icon: Eye,
-      title: "Zero-Knowledge Proofs",
+      icon: Target,
+      title: "Smart Targeting",
       description:
-        "Prove attributes without revealing data. Verify you're over 18 without sharing your birthdate.",
+        "AI-powered airdrop detection and opportunity analysis. Never miss profitable farming opportunities again.",
       color: "pink",
     },
     {
       icon: Network,
-      title: "Cross-Chain Compatible",
+      title: "Multi-Chain Support",
       description:
-        "Works across multiple blockchains including Ethereum, Polygon, and more through Hedera's bridge technology.",
+        "Farm airdrops across Ethereum, Polygon, Arbitrum, Optimism, and BSC. One agent, multiple chains.",
       color: "orange",
     },
     {
       icon: Zap,
-      title: "Gasless Verification",
+      title: "Gas Optimization",
       description:
-        "Users don't pay transaction fees. Powered by Yellow Network for seamless, cost-free identity verification.",
+        "Intelligent transaction batching and fee management. Maximize profits by minimizing gas costs.",
       color: "cyan",
     },
   ];
 
   const howItWorksSteps = [
     {
-      icon: FileCheck,
-      title: "Register",
+      icon: Bot,
+      title: "Create Agent",
       description:
-        "Submit your identity details securely through our encrypted form",
+        "Create your Agent Wallet using Lit Protocol PKP. This separate wallet will do all the farming work.",
     },
     {
-      icon: Lock,
-      title: "Encrypt",
+      icon: Settings,
+      title: "Set Rules",
       description:
-        "Data is encrypted with Lit Protocol using your wallet signature",
+        "Configure your 'if-this-then-that' rules. Define triggers, amounts, and actions for automatic execution.",
     },
     {
-      icon: Database,
-      title: "Store",
-      description: "Encrypted data stored on IPFS for decentralized access",
+      icon: Zap,
+      title: "Fund & Deploy",
+      description:
+        "Load your Agent Wallet with funds and deploy your automation rules to start farming.",
     },
     {
-      icon: ShieldCheck,
-      title: "Mint",
-      description: "NFT minted on Hedera as proof of your identity",
+      icon: Activity,
+      title: "Monitor & Profit",
+      description:
+        "Watch your agent work 24/7, farming airdrops and building your crypto portfolio automatically.",
     },
   ];
 
   const stats = [
-    { value: 100, suffix: "%", label: "Privacy Protected" },
-    { value: 0, prefix: "$", label: "User Fees" },
-    { value: 10000, suffix: "+", label: "Identities Created" },
-    { value: 50000, suffix: "+", label: "Verifications" },
+    { value: 24, suffix: "/7", label: "Agent Uptime" },
+    { value: 0, prefix: "$", label: "Setup Fees" },
+    { value: 5000, suffix: "+", label: "Agents Active" },
+    { value: 150000, suffix: "+", label: "Airdrops Farmed" },
   ];
 
   return (
@@ -282,13 +291,13 @@ export default function Home() {
               }`}
             >
               <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
-              Introducing: Web3 Decentralized Identity
+              Introducing: Automated Airdrop Farming
               <ArrowRight className="w-4 h-4 ml-2" />
             </div>
 
             {/* Main Headline */}
             <AnimatedText
-              text="Your Identity, Your Control"
+              text="Set It and Forget It"
               className={`text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight transition-all duration-1200 ease-out ${
                 isLoaded
                   ? "opacity-100 translate-y-0"
@@ -306,12 +315,11 @@ export default function Home() {
               }`}
               style={{ transitionDelay: "600ms" }}
             >
-              ChainID is the{" "}
+              NIMBUS (DropPilot) is the{" "}
               <span className="text-blue-400 font-semibold">
-                Web3 alternative to Aadhaar
+                automated airdrop farming platform
               </span>
-              . A privacy-preserving, decentralized digital identity system
-              where you control your data completely.
+              . Your agent works 24/7 to farm crypto airdrops while you sleep.
             </p>
 
             {/* CTA Buttons */}
@@ -323,25 +331,25 @@ export default function Home() {
               }`}
               style={{ transitionDelay: "800ms" }}
             >
-              <Link href="/register">
+              <Link href="/dashboard">
                 <Button
                   size="lg"
                   className="group relative inline-flex items-center px-8 py-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-bold text-lg rounded-2xl hover:from-purple-500 hover:via-pink-500 hover:to-blue-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg border border-purple-400/30"
                 >
-                  <Shield className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform duration-300" />
-                  Create Your Identity
+                  <Bot className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                  Create Your Agent
                   <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
               </Link>
 
-              <Link href="/verify">
+              <Link href="/activity">
                 <Button
                   size="lg"
                   variant="outline"
                   className="px-8 py-6 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 rounded-2xl text-lg font-bold transition-all duration-300 hover:scale-105"
                 >
-                  <CheckCircle className="w-6 h-6 mr-3" />
-                  Verify Credentials
+                  <Activity className="w-6 h-6 mr-3" />
+                  View Activity
                 </Button>
               </Link>
             </div>
@@ -357,12 +365,14 @@ export default function Home() {
                 style={{ transitionDelay: "1000ms" }}
               >
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Lock className="w-7 h-7 text-white" />
+                  <Bot className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Encrypt</h3>
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  Create Agent
+                </h3>
                 <p className="text-gray-300 text-left">
-                  Your data is encrypted with Lit Protocol before leaving your
-                  device. True privacy by design.
+                  Create your Agent Wallet using Lit Protocol PKP. This separate
+                  wallet will do all the farming work.
                 </p>
               </div>
 
@@ -375,12 +385,14 @@ export default function Home() {
                 style={{ transitionDelay: "1200ms" }}
               >
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Database className="w-7 h-7 text-white" />
+                  <Settings className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Store</h3>
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  Set Rules
+                </h3>
                 <p className="text-gray-300 text-left">
-                  Decentralized storage on IPFS means no corporation controls
-                  your identity data.
+                  Configure your 'if-this-then-that' rules. Define triggers,
+                  amounts, and actions for automatic execution.
                 </p>
               </div>
 
@@ -393,12 +405,12 @@ export default function Home() {
                 style={{ transitionDelay: "1400ms" }}
               >
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Eye className="w-7 h-7 text-white" />
+                  <Activity className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Verify</h3>
+                <h3 className="text-2xl font-bold text-white mb-3">Automate</h3>
                 <p className="text-gray-300 text-left">
-                  Prove attributes with zero-knowledge proofs. Share proof, not
-                  personal data.
+                  Watch your agent work 24/7, farming airdrops and building your
+                  crypto portfolio automatically.
                 </p>
               </div>
             </div>
@@ -451,7 +463,7 @@ export default function Home() {
                 ✨ Features
               </div>
               <AnimatedText
-                text="Why ChainID is Different"
+                text="Why NIMBUS is Different"
                 className="text-4xl lg:text-5xl font-bold mb-6"
                 delay={100}
               />
@@ -463,8 +475,8 @@ export default function Home() {
                 }`}
                 style={{ transitionDelay: "200ms" }}
               >
-                Built on cutting-edge Web3 technology to ensure your privacy,
-                security, and sovereignty
+                Built on Lit Protocol to ensure your agents work 24/7, farming
+                airdrops while you sleep
               </p>
             </div>
 
@@ -515,7 +527,7 @@ export default function Home() {
                 💡 How It Works
               </div>
               <AnimatedText
-                text="Simple Steps to Decentralized Identity"
+                text="Simple Steps to Automated Farming"
                 className="text-4xl lg:text-5xl font-bold mb-6"
                 delay={100}
               />
@@ -527,8 +539,7 @@ export default function Home() {
                 }`}
                 style={{ transitionDelay: "200ms" }}
               >
-                Create your privacy-preserving digital identity in four simple
-                steps
+                Set up your automated airdrop farming agent in four simple steps
               </p>
             </div>
 
@@ -571,34 +582,34 @@ export default function Home() {
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold text-white max-w-4xl mx-auto">
-            Ready to Take Control of Your Digital Identity?
+            Ready to Start Automated Airdrop Farming?
           </h2>
 
           <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of users who have reclaimed their privacy with
-            ChainID. No fees, complete control, and privacy guaranteed.
+            Join thousands of users who are farming airdrops 24/7 with NIMBUS.
+            No setup fees, complete automation, and maximum profits guaranteed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link href="/register">
+            <Link href="/dashboard">
               <Button
                 size="lg"
                 className="bg-white text-purple-600 hover:bg-gray-100 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 font-bold text-lg px-8 py-6"
               >
-                <Shield className="w-6 h-6 mr-2" />
-                Create Identity Now
+                <Bot className="w-6 h-6 mr-2" />
+                Create Your Agent
                 <ArrowRight className="w-6 h-6 ml-2" />
               </Button>
             </Link>
 
-            <Link href="/dashboard">
+            <Link href="/activity">
               <Button
                 size="lg"
                 variant="outline"
                 className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold text-lg px-8 py-6"
               >
-                <Users className="w-6 h-6 mr-2" />
-                View Dashboard
+                <Activity className="w-6 h-6 mr-2" />
+                View Activity
               </Button>
             </Link>
           </div>

@@ -5,23 +5,23 @@ import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "./ui/button";
 import {
-  Shield,
+  Bot,
   Menu,
   X,
   ChevronDown,
   Sparkles,
-  Lock,
-  Eye,
-  Database,
+  Settings,
+  Target,
+  Activity,
   Network,
   Zap,
-  FileCheck,
-  Key,
+  Coins,
+  TrendingUp,
   Users,
   Building2,
   BookOpen,
   HelpCircle,
-  ShieldCheck,
+  CheckCircle,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -45,13 +45,13 @@ export function Navbar() {
             <Sparkles className="w-4 h-4" />
           </div>
           <span className="font-semibold">
-            🔐 Live: 10,000+ Identities • 100% Privacy Protected • $0 Fees
+            🤖 Live: 5,000+ Agents • 24/7 Airdrop Farming • $0 Setup Fees
           </span>
           <Link
-            href="/register"
+            href="/dashboard"
             className="ml-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium hover:bg-white/30 transition-all duration-300"
           >
-            Get Started →
+            Start Farming →
           </Link>
         </div>
       </div>
@@ -63,9 +63,9 @@ export function Navbar() {
             <div className="flex items-center">
               <Link href="/" className="flex items-center gap-2 group">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300 shadow-md">
-                  <Shield className="w-6 h-6 text-white" />
+                  <Bot className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold text-gray-900">ChainID</span>
+                <span className="text-xl font-bold text-gray-900">NIMBUS</span>
               </Link>
             </div>
 
@@ -78,7 +78,7 @@ export function Navbar() {
                       variant="ghost"
                       className="flex items-center gap-2 h-10 text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-all duration-300"
                     >
-                      <Shield className="w-4 h-4" />
+                      <Bot className="w-4 h-4" />
                       Features
                       <ChevronDown className="w-3 h-3" />
                     </Button>
@@ -90,7 +90,7 @@ export function Navbar() {
                     <div className="p-4">
                       <div className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-purple-600" />
-                        Identity Features
+                        Agent Features
                       </div>
                       <div className="grid gap-3">
                         <DropdownMenuItem asChild>
@@ -99,14 +99,14 @@ export function Navbar() {
                             className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition-all duration-300 group"
                           >
                             <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                              <Lock className="w-5 h-5 text-purple-600" />
+                              <Bot className="w-5 h-5 text-purple-600" />
                             </div>
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900 text-sm">
-                                Lit Protocol Encryption
+                                Agent Wallet Creation
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Military-grade data encryption
+                                Create separate PKP wallets for farming
                               </div>
                             </div>
                             <div className="text-xs text-purple-600 font-semibold">
@@ -121,18 +121,18 @@ export function Navbar() {
                             className="flex items-center gap-4 p-4 rounded-xl hover:bg-pink-50 transition-all duration-300 group"
                           >
                             <div className="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center group-hover:bg-pink-200 transition-colors">
-                              <Eye className="w-5 h-5 text-pink-600" />
+                              <Settings className="w-5 h-5 text-pink-600" />
                             </div>
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900 text-sm">
-                                Zero-Knowledge Proofs
+                                Rules Engine
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Verify without revealing data
+                                Set if-this-then-that automation rules
                               </div>
                             </div>
                             <div className="text-xs text-green-600 font-semibold">
-                              Private
+                              Smart
                             </div>
                           </Link>
                         </DropdownMenuItem>
@@ -143,18 +143,19 @@ export function Navbar() {
                             className="flex items-center gap-4 p-4 rounded-xl hover:bg-blue-50 transition-all duration-300 group"
                           >
                             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                              <ShieldCheck className="w-5 h-5 text-blue-600" />
+                              <Activity className="w-5 h-5 text-blue-600" />
                             </div>
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900 text-sm">
-                                NFT-Based Identity
+                                24/7 Automation
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Immutable proof on Hedera
+                                Lit Protocol-powered agents work around the
+                                clock
                               </div>
                             </div>
                             <div className="text-xs text-blue-600 font-semibold">
-                              Hedera
+                              Always On
                             </div>
                           </Link>
                         </DropdownMenuItem>
@@ -163,24 +164,24 @@ export function Navbar() {
 
                         <DropdownMenuItem asChild>
                           <Link
-                            href="#ipfs"
+                            href="#multi-chain"
                             className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300"
                           >
-                            <Database className="w-4 h-4 text-gray-600" />
+                            <Network className="w-4 h-4 text-gray-600" />
                             <span className="text-sm text-gray-700">
-                              IPFS Storage
+                              Multi-Chain Support
                             </span>
                           </Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
                           <Link
-                            href="#gasless"
+                            href="#gas-optimization"
                             className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300"
                           >
                             <Zap className="w-4 h-4 text-gray-600" />
                             <span className="text-sm text-gray-700">
-                              Gasless Verification
+                              Gas Optimization
                             </span>
                           </Link>
                         </DropdownMenuItem>
@@ -207,7 +208,7 @@ export function Navbar() {
                     <div className="p-4">
                       <div className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <Users className="w-4 h-4 text-blue-600" />
-                        Use Cases
+                        Agent Solutions
                       </div>
                       <div className="grid gap-3">
                         <DropdownMenuItem asChild>
@@ -223,7 +224,7 @@ export function Navbar() {
                                 For Individuals
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Personal identity management
+                                Personal airdrop farming agents
                               </div>
                             </div>
                           </Link>
@@ -242,7 +243,7 @@ export function Navbar() {
                                 For dApps
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Integrate identity verification
+                                Integrate agent automation
                               </div>
                             </div>
                           </Link>
@@ -261,7 +262,7 @@ export function Navbar() {
                                 For Enterprises
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
-                                Enterprise KYC solutions
+                                Enterprise automation solutions
                               </div>
                             </div>
                           </Link>
@@ -353,13 +354,13 @@ export function Navbar() {
             {/* Right side actions */}
             <div className="flex items-center gap-3">
               <div className="hidden md:flex items-center gap-2">
-                <Link href="/register">
+                <Link href="/agent/create">
                   <Button
                     variant="ghost"
                     size="sm"
                     className="text-gray-700 hover:text-gray-900"
                   >
-                    Register
+                    Create Agent
                   </Button>
                 </Link>
                 <Link href="/dashboard">
@@ -371,13 +372,22 @@ export function Navbar() {
                     Dashboard
                   </Button>
                 </Link>
-                <Link href="/verify">
+                <Link href="/rules">
                   <Button
                     variant="ghost"
                     size="sm"
                     className="text-gray-700 hover:text-gray-900"
                   >
-                    Verify
+                    Rules
+                  </Button>
+                </Link>
+                <Link href="/activity">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-700 hover:text-gray-900"
+                  >
+                    Activity
                   </Button>
                 </Link>
               </div>
@@ -408,11 +418,11 @@ export function Navbar() {
           <div className="lg:hidden border-t border-gray-200 bg-white">
             <div className="container mx-auto px-4 py-4 space-y-2">
               <Link
-                href="/register"
+                href="/agent/create"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Register
+                Create Agent
               </Link>
               <Link
                 href="/dashboard"
@@ -422,11 +432,18 @@ export function Navbar() {
                 Dashboard
               </Link>
               <Link
-                href="/verify"
+                href="/rules"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Verify
+                Rules
+              </Link>
+              <Link
+                href="/activity"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Activity
               </Link>
               <div className="pt-4">
                 <ConnectButton />

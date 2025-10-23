@@ -9,9 +9,9 @@ import { Navbar } from "@/components/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ChainID - Decentralized Digital Identity",
+  title: "NIMBUS - DropPilot Airdrop Automation",
   description:
-    "Privacy-preserving, decentralized digital identity system powered by Web3",
+    "Set it and forget it airdrop farming. Your automated agent works 24/7 to farm crypto airdrops across multiple chains.",
 };
 
 export default function RootLayout({

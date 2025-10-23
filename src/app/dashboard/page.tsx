@@ -2,77 +2,135 @@
 
 import { useAccount } from "wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Activity, User } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Bot,
+  Activity,
+  Settings,
+  Target,
+  TrendingUp,
+  Coins,
+  Zap,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Plus,
+  Play,
+  Pause,
+  RotateCcw,
+} from "lucide-react";
 import { ConnectWallet } from "@/components/Auth/ConnectWallet";
-import { Overview } from "@/components/Dashboard/Overview";
-import { VerificationHistory } from "@/components/Dashboard/VerificationHistory";
-import { CredentialsList } from "@/components/Dashboard/CredentialsList";
-import { IdentityCard } from "@/components/Identity/IdentityCard";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { address, isConnected } = useAccount();
 
-  // Mock data
-  const identityData = {
-    tokenId: "0.0.12345",
-    walletAddress: address || "",
-    ipfsHash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG",
-    createdAt: "2025-01-15",
-    verificationCount: 42,
+  // Mock data for DropPilot dashboard
+  const agentData = {
+    name: "My Airdrop Agent",
+    walletAddress: "0x742d...8f3a",
     status: "Active" as const,
+    balance: "0.15 ETH",
+    totalProfit: "$127.50",
+    uptime: "99.8%",
+    rulesActive: 3,
+    totalExecutions: 47,
+    lastActivity: "2 minutes ago",
   };
 
-  const credentials = [
+  const stats = [
     {
-      id: "1",
-      type: "Age Verification",
-      status: "Verified",
-      date: "2025-01-15",
-      dapp: "DeFi Protocol",
+      title: "Total Profit",
+      value: "$127.50",
+      change: "+12.3%",
+      icon: TrendingUp,
+      color: "text-green-600",
     },
     {
-      id: "2",
-      type: "Country Check",
-      status: "Verified",
-      date: "2025-01-16",
-      dapp: "NFT Marketplace",
+      title: "Active Rules",
+      value: "3",
+      change: "+1 this week",
+      icon: Settings,
+      color: "text-blue-600",
     },
     {
-      id: "3",
-      type: "KYC Completion",
-      status: "Verified",
-      date: "2025-01-18",
-      dapp: "Lending Platform",
+      title: "Executions",
+      value: "47",
+      change: "+8 today",
+      icon: Zap,
+      color: "text-purple-600",
+    },
+    {
+      title: "Airdrops Found",
+      value: "12",
+      change: "+2 this week",
+      icon: Target,
+      color: "text-orange-600",
     },
   ];
 
-  const verificationHistory = [
+  const recentActivities = [
     {
       id: "1",
-      type: "age_over_18",
-      dapp: "defi-protocol-xyz",
-      result: true,
-      timestamp: "2025-01-20T10:30:00Z",
-      txHash: "0xabc123def456...",
-      proof: "zkp_proof_12345...",
+      type: "rule_execution",
+      title: "ZkSync Airdrop Rule Executed",
+      description: "Successfully bridged 0.05 ETH and performed 2 swaps",
+      timestamp: "2 minutes ago",
+      status: "success",
+      profit: "+$12.50",
     },
     {
       id: "2",
-      type: "country_verification",
-      dapp: "nft-marketplace",
-      result: true,
-      timestamp: "2025-01-19T15:45:00Z",
-      txHash: "0xdef456abc789...",
-      proof: "zkp_proof_67890...",
+      type: "airdrop_detected",
+      title: "New Airdrop Detected",
+      description: "LayerZero airdrop opportunity found on Arbitrum",
+      timestamp: "15 minutes ago",
+      status: "success",
     },
     {
       id: "3",
-      type: "credential_check",
-      dapp: "lending-platform",
-      result: true,
-      timestamp: "2025-01-18T08:20:00Z",
-      txHash: "0x789abc123def...",
-      proof: "zkp_proof_11111...",
+      type: "transaction",
+      title: "Token Swap Completed",
+      description: "Swapped 0.1 ETH for USDC on Uniswap",
+      timestamp: "1 hour ago",
+      status: "success",
+      profit: "+$8.30",
+    },
+  ];
+
+  const rules = [
+    {
+      id: "1",
+      name: "ZkSync Airdrop Hunter",
+      status: "active",
+      executions: 3,
+      lastExecuted: "2 hours ago",
+      profit: "+$12.50",
+    },
+    {
+      id: "2",
+      name: "LayerZero Bridge Bot",
+      status: "active",
+      executions: 1,
+      lastExecuted: "1 day ago",
+      profit: "+$5.20",
+    },
+    {
+      id: "3",
+      name: "Starknet DEX Trader",
+      status: "paused",
+      executions: 0,
+      lastExecuted: "Never",
+      profit: "$0.00",
     },
   ];
 
@@ -88,44 +146,257 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+          <h1 className="text-4xl font-bold mb-2">DropPilot Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage your decentralized identity and view verification history
+            Monitor your automated airdrop farming agent and track performance
           </p>
         </div>
 
-        {/* Identity Overview Cards */}
-        <div className="mb-8">
-          <Overview identity={identityData} />
+        {/* Agent Status Card */}
+        <Card className="mb-8 border-green-200 bg-green-50">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">{agentData.name}</CardTitle>
+                  <CardDescription>
+                    Agent Wallet: {agentData.walletAddress} • Balance:{" "}
+                    {agentData.balance}
+                  </CardDescription>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-green-100 text-green-800">
+                  <CheckCircle className="w-3 h-3 mr-1" />
+                  {agentData.status}
+                </Badge>
+                <Button variant="outline" size="sm">
+                  <Settings className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">
+                  {agentData.totalProfit}
+                </div>
+                <div className="text-sm text-gray-600">Total Profit</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">
+                  {agentData.uptime}
+                </div>
+                <div className="text-sm text-gray-600">Uptime</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-600">
+                  {agentData.rulesActive}
+                </div>
+                <div className="text-sm text-gray-600">Active Rules</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600">
+                  {agentData.totalExecutions}
+                </div>
+                <div className="text-sm text-gray-600">Executions</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      {stat.title}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                    </p>
+                    <p className={`text-sm ${stat.color}`}>{stat.change}</p>
+                  </div>
+                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Tabs Section */}
-        <Tabs defaultValue="credentials" className="space-y-4">
+        <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="credentials">
-              <FileText className="w-4 h-4 mr-2" />
-              Credentials
+            <TabsTrigger value="overview">
+              <Bot className="w-4 h-4 mr-2" />
+              Overview
             </TabsTrigger>
-            <TabsTrigger value="history">
+            <TabsTrigger value="rules">
+              <Settings className="w-4 h-4 mr-2" />
+              Rules
+            </TabsTrigger>
+            <TabsTrigger value="activity">
               <Activity className="w-4 h-4 mr-2" />
-              Verification History
-            </TabsTrigger>
-            <TabsTrigger value="identity">
-              <User className="w-4 h-4 mr-2" />
-              Identity Card
+              Activity
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="credentials" className="space-y-4">
-            <CredentialsList credentials={credentials} />
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Recent Activities */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="w-5 h-5" />
+                    Recent Activities
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {recentActivities.map((activity) => (
+                    <div
+                      key={activity.id}
+                      className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
+                    >
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                        <Zap className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900">
+                          {activity.title}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {activity.description}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs text-gray-500">
+                            {activity.timestamp}
+                          </span>
+                          {activity.profit && (
+                            <span className="text-xs text-green-600 font-medium">
+                              {activity.profit}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <Link href="/activity">
+                    <Button variant="outline" className="w-full">
+                      View All Activities
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="w-5 h-5" />
+                    Quick Actions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Link href="/agent/create">
+                    <Button className="w-full justify-start" variant="outline">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create New Agent
+                    </Button>
+                  </Link>
+                  <Link href="/rules">
+                    <Button className="w-full justify-start" variant="outline">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Manage Rules
+                    </Button>
+                  </Link>
+                  <Link href="/activity">
+                    <Button className="w-full justify-start" variant="outline">
+                      <Activity className="w-4 h-4 mr-2" />
+                      View Activity Feed
+                    </Button>
+                  </Link>
+                  <Button className="w-full justify-start" variant="outline">
+                    <RotateCcw className="w-4 h-4 mr-2" />
+                    Restart Agent
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          <TabsContent value="history" className="space-y-4">
-            <VerificationHistory history={verificationHistory} />
+          <TabsContent value="rules" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Automation Rules</h3>
+              <Link href="/rules">
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Rule
+                </Button>
+              </Link>
+            </div>
+            <div className="space-y-4">
+              {rules.map((rule) => (
+                <Card key={rule.id}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            rule.status === "active"
+                              ? "bg-green-500"
+                              : "bg-gray-400"
+                          }`}
+                        />
+                        <div>
+                          <h4 className="font-semibold">{rule.name}</h4>
+                          <p className="text-sm text-gray-600">
+                            {rule.executions} executions • Last:{" "}
+                            {rule.lastExecuted}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-green-600">
+                          {rule.profit}
+                        </span>
+                        <Button variant="ghost" size="sm">
+                          {rule.status === "active" ? (
+                            <Pause className="w-4 h-4" />
+                          ) : (
+                            <Play className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
 
-          <TabsContent value="identity" className="space-y-4">
-            <IdentityCard identity={identityData} />
+          <TabsContent value="activity" className="space-y-4">
+            <div className="text-center py-12">
+              <Activity className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Activity Feed
+              </h3>
+              <p className="text-gray-600 mb-6">
+                View detailed activity logs and performance metrics
+              </p>
+              <Link href="/activity">
+                <Button>
+                  <Activity className="w-4 h-4 mr-2" />
+                  View Full Activity Feed
+                </Button>
+              </Link>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
