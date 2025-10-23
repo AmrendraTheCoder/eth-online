@@ -55,17 +55,24 @@ export default function CreateAgent() {
     try {
       // Import the useLitProtocol hook
       const { createPKPWallet } = await import("@/hooks/useLitProtocol");
-      
+
       // Create PKP wallet using real LIT Protocol
-      const pkpWallet = await createPKPWallet(agentData.name, agentData.initialFunds);
-      
+      const pkpWallet = await createPKPWallet(
+        agentData.name,
+        agentData.initialFunds
+      );
+
       console.log("✅ PKP wallet created:", pkpWallet);
-      
+
       setAgentCreated(true);
     } catch (error) {
       console.error("❌ Failed to create PKP wallet:", error);
       // Handle error - you might want to show an error message to the user
-      alert(`Failed to create agent: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Failed to create agent: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setIsCreating(false);
     }
