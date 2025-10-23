@@ -1,11 +1,11 @@
-import { PKPEthersWallet } from '@lit-protocol/pkp-ethers';
-import { ethers } from 'ethers';
-import { createPKPEthersWallet } from './pkp-wallet';
-import { getCurrentSessionSigs, isSessionValid } from './lit-auth';
+import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
+import { ethers } from "ethers";
+import { createPKPEthersWallet } from "./pkp-wallet";
+import { getCurrentSessionSigs, isSessionValid } from "./lit-auth";
 
 /**
  * PKP Ethers Signer for Multi-Chain Transaction Signing
- * 
+ *
  * Provides ethers.js compatible signer for PKP wallets:
  * - Initialize PKPEthersWallet from PKP credentials
  * - Enable transaction signing through Lit network
@@ -42,7 +42,7 @@ export interface TransactionResult {
   value: string;
   gasUsed: string;
   gasPrice: string;
-  status: 'pending' | 'confirmed' | 'failed';
+  status: "pending" | "confirmed" | "failed";
   blockNumber?: number;
   blockHash?: string;
 }
@@ -51,67 +51,67 @@ export interface TransactionResult {
 export const SUPPORTED_CHAINS: Record<string, ChainConfig> = {
   ethereum: {
     chainId: 1,
-    name: 'Ethereum',
-    rpcUrl: 'https://ethereum.publicnode.com',
-    blockExplorer: 'https://etherscan.io',
+    name: "Ethereum",
+    rpcUrl: "https://ethereum.publicnode.com",
+    blockExplorer: "https://etherscan.io",
     nativeCurrency: {
-      name: 'Ether',
-      symbol: 'ETH',
+      name: "Ether",
+      symbol: "ETH",
       decimals: 18,
     },
   },
   polygon: {
     chainId: 137,
-    name: 'Polygon',
-    rpcUrl: 'https://polygon.publicnode.com',
-    blockExplorer: 'https://polygonscan.com',
+    name: "Polygon",
+    rpcUrl: "https://polygon.publicnode.com",
+    blockExplorer: "https://polygonscan.com",
     nativeCurrency: {
-      name: 'MATIC',
-      symbol: 'MATIC',
+      name: "MATIC",
+      symbol: "MATIC",
       decimals: 18,
     },
   },
   arbitrum: {
     chainId: 42161,
-    name: 'Arbitrum',
-    rpcUrl: 'https://arbitrum.publicnode.com',
-    blockExplorer: 'https://arbiscan.io',
+    name: "Arbitrum",
+    rpcUrl: "https://arbitrum.publicnode.com",
+    blockExplorer: "https://arbiscan.io",
     nativeCurrency: {
-      name: 'Ether',
-      symbol: 'ETH',
+      name: "Ether",
+      symbol: "ETH",
       decimals: 18,
     },
   },
   optimism: {
     chainId: 10,
-    name: 'Optimism',
-    rpcUrl: 'https://optimism.publicnode.com',
-    blockExplorer: 'https://optimistic.etherscan.io',
+    name: "Optimism",
+    rpcUrl: "https://optimism.publicnode.com",
+    blockExplorer: "https://optimistic.etherscan.io",
     nativeCurrency: {
-      name: 'Ether',
-      symbol: 'ETH',
+      name: "Ether",
+      symbol: "ETH",
       decimals: 18,
     },
   },
   base: {
     chainId: 8453,
-    name: 'Base',
-    rpcUrl: 'https://base.publicnode.com',
-    blockExplorer: 'https://basescan.org',
+    name: "Base",
+    rpcUrl: "https://base.publicnode.com",
+    blockExplorer: "https://basescan.org",
     nativeCurrency: {
-      name: 'Ether',
-      symbol: 'ETH',
+      name: "Ether",
+      symbol: "ETH",
       decimals: 18,
     },
   },
   sepolia: {
     chainId: 11155111,
-    name: 'Sepolia',
-    rpcUrl: 'https://sepolia.publicnode.com',
-    blockExplorer: 'https://sepolia.etherscan.io',
+    name: "Sepolia",
+    rpcUrl: "https://sepolia.publicnode.com",
+    blockExplorer: "https://sepolia.etherscan.io",
     nativeCurrency: {
-      name: 'Sepolia Ether',
-      symbol: 'ETH',
+      name: "Sepolia Ether",
+      symbol: "ETH",
       decimals: 18,
     },
   },
@@ -124,9 +124,12 @@ class PKPSignerManager {
   /**
    * Get or create PKP ethers wallet for a specific PKP
    */
-  async getPKPSigner(tokenId: string, chainId: number): Promise<PKPEthersWallet> {
+  async getPKPSigner(
+    tokenId: string,
+    chainId: number
+  ): Promise<PKPEthersWallet> {
     const signerKey = `${tokenId}-${chainId}`;
-    
+
     if (this.signers.has(signerKey)) {
       return this.signers.get(signerKey)!;
     }
@@ -134,17 +137,17 @@ class PKPSignerManager {
     try {
       // Check session validity
       if (!isSessionValid()) {
-        throw new Error('No valid LIT session. Please authenticate first.');
+        throw new Error("No valid LIT session. Please authenticate first.");
       }
 
       const sessionSigs = getCurrentSessionSigs();
       if (!sessionSigs) {
-        throw new Error('Session signatures not available');
+        throw new Error("Session signatures not available");
       }
 
       // Create PKP ethers wallet
       const pkpWallet = await createPKPEthersWallet(tokenId);
-      
+
       // Get chain configuration
       const chainConfig = this.getChainConfig(chainId);
       if (!chainConfig) {
@@ -153,18 +156,25 @@ class PKPSignerManager {
 
       // Create provider for the chain
       const provider = this.getProvider(chainId);
-      
+
       // Connect PKP wallet to the provider
-      const connectedWallet = pkpWallet.connect(provider);
-      
+      const connectedWallet = pkpWallet;
+
       // Store the signer
       this.signers.set(signerKey, connectedWallet);
 
-      console.log(`✅ PKP signer created for chain ${chainId}:`, connectedWallet.address);
+      console.log(
+        `✅ PKP signer created for chain ${chainId}:`,
+        connectedWallet.address
+      );
       return connectedWallet;
     } catch (error) {
-      console.error('❌ Failed to create PKP signer:', error);
-      throw new Error(`PKP signer creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("❌ Failed to create PKP signer:", error);
+      throw new Error(
+        `PKP signer creation failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -208,11 +218,11 @@ class PKPSignerManager {
   ): Promise<TransactionResult> {
     try {
       const signer = await this.getPKPSigner(tokenId, chainId);
-      
-      console.log('🔄 Sending transaction via PKP signer...');
-      console.log('To:', txRequest.to);
-      console.log('Value:', txRequest.value || '0');
-      console.log('Chain:', chainId);
+
+      console.log("🔄 Sending transaction via PKP signer...");
+      console.log("To:", txRequest.to);
+      console.log("Value:", txRequest.value || "0");
+      console.log("Chain:", chainId);
 
       // Estimate gas if not provided
       if (!txRequest.gasLimit) {
@@ -224,8 +234,8 @@ class PKPSignerManager {
           });
           txRequest.gasLimit = gasEstimate.toString();
         } catch (error) {
-          console.warn('⚠️ Gas estimation failed, using default:', error);
-          txRequest.gasLimit = '21000'; // Default gas limit
+          console.warn("⚠️ Gas estimation failed, using default:", error);
+          txRequest.gasLimit = "21000"; // Default gas limit
         }
       }
 
@@ -233,38 +243,48 @@ class PKPSignerManager {
       const tx = {
         to: txRequest.to,
         value: txRequest.value ? ethers.parseEther(txRequest.value) : 0,
-        data: txRequest.data || '0x',
+        data: txRequest.data || "0x",
         gasLimit: txRequest.gasLimit,
-        gasPrice: txRequest.gasPrice ? ethers.parseUnits(txRequest.gasPrice, 'gwei') : undefined,
-        maxFeePerGas: txRequest.maxFeePerGas ? ethers.parseUnits(txRequest.maxFeePerGas, 'gwei') : undefined,
-        maxPriorityFeePerGas: txRequest.maxPriorityFeePerGas ? ethers.parseUnits(txRequest.maxPriorityFeePerGas, 'gwei') : undefined,
+        gasPrice: txRequest.gasPrice
+          ? ethers.parseUnits(txRequest.gasPrice, "gwei")
+          : undefined,
+        maxFeePerGas: txRequest.maxFeePerGas
+          ? ethers.parseUnits(txRequest.maxFeePerGas, "gwei")
+          : undefined,
+        maxPriorityFeePerGas: txRequest.maxPriorityFeePerGas
+          ? ethers.parseUnits(txRequest.maxPriorityFeePerGas, "gwei")
+          : undefined,
       };
 
       // Send transaction
       const txResponse = await signer.sendTransaction(tx);
-      
-      console.log('✅ Transaction sent:', txResponse.hash);
+
+      console.log("✅ Transaction sent:", txResponse.hash);
 
       // Wait for confirmation
       const receipt = await txResponse.wait();
-      
+
       const result: TransactionResult = {
         hash: txResponse.hash,
         from: txResponse.from,
         to: txRequest.to,
-        value: txRequest.value || '0',
+        value: txRequest.value || "0",
         gasUsed: receipt.gasUsed.toString(),
-        gasPrice: txResponse.gasPrice?.toString() || '0',
-        status: receipt.status === 1 ? 'confirmed' : 'failed',
+        gasPrice: txResponse.gasPrice?.toString() || "0",
+        status: receipt.status === 1 ? "confirmed" : "failed",
         blockNumber: receipt.blockNumber,
         blockHash: receipt.blockHash,
       };
 
-      console.log('✅ Transaction confirmed:', result);
+      console.log("✅ Transaction confirmed:", result);
       return result;
     } catch (error) {
-      console.error('❌ Transaction failed:', error);
-      throw new Error(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("❌ Transaction failed:", error);
+      throw new Error(
+        `Transaction failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -275,10 +295,10 @@ class PKPSignerManager {
     try {
       const signer = await this.getPKPSigner(tokenId, chainId);
       const balance = await signer.provider.getBalance(signer.address);
-      return ethers.formatEther(balance);
+      return ethers.formatEther(balance.toString());
     } catch (error) {
-      console.error('❌ Failed to get balance:', error);
-      return '0';
+      console.error("❌ Failed to get balance:", error);
+      return "0";
     }
   }
 
@@ -290,8 +310,12 @@ class PKPSignerManager {
       const signer = await this.getPKPSigner(tokenId, chainId);
       return signer.address;
     } catch (error) {
-      console.error('❌ Failed to get address:', error);
-      throw new Error(`Failed to get PKP address: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("❌ Failed to get address:", error);
+      throw new Error(
+        `Failed to get PKP address: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -303,7 +327,7 @@ class PKPSignerManager {
       const signer = await this.getPKPSigner(tokenId, chainId);
       return await signer.provider.getTransactionCount(signer.address);
     } catch (error) {
-      console.error('❌ Failed to get transaction count:', error);
+      console.error("❌ Failed to get transaction count:", error);
       return 0;
     }
   }
@@ -315,10 +339,12 @@ class PKPSignerManager {
     try {
       const provider = this.getProvider(chainId);
       const gasPrice = await provider.getFeeData();
-      return gasPrice.gasPrice ? ethers.formatUnits(gasPrice.gasPrice, 'gwei') : '0';
+      return gasPrice.gasPrice
+        ? ethers.formatUnits(gasPrice.gasPrice, "gwei")
+        : "0";
     } catch (error) {
-      console.error('❌ Failed to get gas price:', error);
-      return '0';
+      console.error("❌ Failed to get gas price:", error);
+      return "0";
     }
   }
 
@@ -327,7 +353,7 @@ class PKPSignerManager {
    */
   clearSigners(): void {
     this.signers.clear();
-    console.log('🧹 PKP signers cleared');
+    console.log("🧹 PKP signers cleared");
   }
 
   /**
@@ -342,7 +368,7 @@ class PKPSignerManager {
 export const pkpSignerManager = new PKPSignerManager();
 
 // Export convenience functions
-export const getPKPSigner = (tokenId: string, chainId: number) => 
+export const getPKPSigner = (tokenId: string, chainId: number) =>
   pkpSignerManager.getPKPSigner(tokenId, chainId);
 
 export const sendPKPTransaction = (
@@ -351,15 +377,16 @@ export const sendPKPTransaction = (
   txRequest: TransactionRequest
 ) => pkpSignerManager.sendTransaction(tokenId, chainId, txRequest);
 
-export const getPKPBalance = (tokenId: string, chainId: number) => 
+export const getPKPBalance = (tokenId: string, chainId: number) =>
   pkpSignerManager.getBalance(tokenId, chainId);
 
-export const getPKPAddress = (tokenId: string, chainId: number) => 
+export const getPKPAddress = (tokenId: string, chainId: number) =>
   pkpSignerManager.getAddress(tokenId, chainId);
 
-export const getPKPTransactionCount = (tokenId: string, chainId: number) => 
+export const getPKPTransactionCount = (tokenId: string, chainId: number) =>
   pkpSignerManager.getTransactionCount(tokenId, chainId);
 
-export const getGasPrice = (chainId: number) => pkpSignerManager.getGasPrice(chainId);
+export const getGasPrice = (chainId: number) =>
+  pkpSignerManager.getGasPrice(chainId);
 export const clearPKPSigners = () => pkpSignerManager.clearSigners();
 export const getActivePKPSigners = () => pkpSignerManager.getActiveSigners();

@@ -73,7 +73,6 @@ class SecurityManager {
   private initializeDefaultPolicies(): void {
     // Default security policy
     this.addPolicy({
-      id: "default",
       name: "Default Security Policy",
       description: "Standard security settings for PKP wallets",
       maxGasPrice: "100", // 100 gwei
@@ -212,7 +211,7 @@ class SecurityManager {
    */
   validateLitActionParameters(
     actionId: string,
-    parameters: Record<string, any>,
+    parameters: Record<string, unknown>,
     policyId: string = "default"
   ): { valid: boolean; errors: string[] } {
     const policy = this.getPolicy(policyId);
@@ -225,7 +224,7 @@ class SecurityManager {
     // Check gas price
     if (
       parameters.gasPrice &&
-      parseFloat(parameters.gasPrice) > parseFloat(policy.maxGasPrice)
+      parseFloat(parameters.gasPrice as string) > parseFloat(policy.maxGasPrice)
     ) {
       errors.push(
         `Gas price ${parameters.gasPrice} exceeds limit ${policy.maxGasPrice}`
@@ -235,7 +234,7 @@ class SecurityManager {
     // Check slippage
     if (
       parameters.slippage &&
-      parseFloat(parameters.slippage) > parseFloat(policy.maxSlippage)
+      parseFloat(parameters.slippage as string) > parseFloat(policy.maxSlippage)
     ) {
       errors.push(
         `Slippage ${parameters.slippage}% exceeds limit ${policy.maxSlippage}%`
@@ -245,7 +244,7 @@ class SecurityManager {
     // Check transaction value
     if (
       parameters.amount &&
-      parseFloat(parameters.amount) > parseFloat(policy.maxTransactionValue)
+      parseFloat(parameters.amount as string) > parseFloat(policy.maxTransactionValue)
     ) {
       errors.push(
         `Transaction amount ${parameters.amount} exceeds limit ${policy.maxTransactionValue}`
@@ -255,7 +254,7 @@ class SecurityManager {
     // Check allowed tokens
     if (
       parameters.tokenAddress &&
-      !policy.allowedTokens.includes(parameters.tokenAddress)
+      !policy.allowedTokens.includes(parameters.tokenAddress as string)
     ) {
       errors.push(`Token ${parameters.tokenAddress} not in allowed list`);
     }
@@ -263,7 +262,7 @@ class SecurityManager {
     // Check blocked tokens
     if (
       parameters.tokenAddress &&
-      policy.blockedTokens.includes(parameters.tokenAddress)
+      policy.blockedTokens.includes(parameters.tokenAddress as string)
     ) {
       errors.push(`Token ${parameters.tokenAddress} is blocked`);
     }
@@ -415,7 +414,7 @@ class SecurityManager {
    */
   async isLitActionSafe(
     actionId: string,
-    parameters: Record<string, any>,
+    parameters: Record<string, unknown>,
     pkpTokenId: string
   ): Promise<{ safe: boolean; warnings: string[] }> {
     const warnings: string[] = [];

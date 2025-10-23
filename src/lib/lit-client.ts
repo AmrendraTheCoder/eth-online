@@ -17,12 +17,13 @@ class LitClientManager {
   private client: LitNodeClient | null = null;
   private isConnecting = false;
   private connectionPromise: Promise<void> | null = null;
+  private connected = false;
 
   /**
    * Get or create the LIT client instance
    */
   async getClient(): Promise<LitNodeClient> {
-    if (this.client && this.client.connected) {
+    if (this.client && this.connected) {
       return this.client;
     }
 
@@ -73,14 +74,16 @@ class LitClientManager {
 
       // Connect to Lit network with attestation verification
       await this.client.connect();
+      this.connected = true;
 
       console.log(`✅ Connected to LIT network: ${network}`);
       console.log(
-        `🔐 Attestation verified for ${this.client.config.litNetworkName}`
+        `🔐 Attestation verified for ${this.client.config.litNetwork}`
       );
     } catch (error) {
       console.error("❌ Failed to connect to LIT network:", error);
       this.client = null;
+      this.connected = false;
       throw new Error(
         `LIT connection failed: ${
           error instanceof Error ? error.message : "Unknown error"
@@ -93,7 +96,7 @@ class LitClientManager {
    * Check if client is connected
    */
   isConnected(): boolean {
-    return this.client?.connected || false;
+    return this.connected;
   }
 
   /**
@@ -102,7 +105,7 @@ class LitClientManager {
   getConnectionStatus() {
     return {
       connected: this.isConnected(),
-      network: this.client?.config?.litNetworkName || "unknown",
+      network: this.client?.config?.litNetwork || "unknown",
       isConnecting: this.isConnecting,
     };
   }
@@ -113,12 +116,13 @@ class LitClientManager {
   async disconnect(): Promise<void> {
     if (this.client) {
       try {
-        await this.client.disconnect();
+        // LitNodeClient doesn't have a disconnect method, just set connected to false
         console.log("🔌 Disconnected from LIT network");
       } catch (error) {
         console.error("❌ Error disconnecting from LIT network:", error);
       } finally {
         this.client = null;
+        this.connected = false;
         this.isConnecting = false;
         this.connectionPromise = null;
       }

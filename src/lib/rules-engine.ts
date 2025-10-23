@@ -1,5 +1,4 @@
-import { litActionExecutor, executeLitAction } from "./lit-actions-executor";
-import { getPKPWallet } from "./pkp-wallet";
+import { executeLitAction } from "./lit-actions-executor";
 
 /**
  * Enhanced Rules Engine for Lit Actions Integration
@@ -25,7 +24,7 @@ export interface AirdropRule {
   profit?: string;
   // Lit Action integration fields
   litActionTemplateId?: string;
-  litActionParameters?: Record<string, any>;
+  litActionParameters?: Record<string, unknown>;
   litActionExecutionId?: string;
   litActionIPFSCID?: string;
   litActionLastExecution?: LitActionExecutionResult;
@@ -83,7 +82,6 @@ class RulesEngine {
   private initializeDefaultRules(): void {
     // ZkSync Airdrop Rule
     this.addRule({
-      id: "zk_sync_airdrop",
       name: "ZkSync Airdrop Hunter",
       trigger: "new_airdrop",
       condition: "chain = 'zksync' AND estimatedValue > 500",
@@ -91,7 +89,6 @@ class RulesEngine {
       amount: "0.05",
       chain: "zksync",
       enabled: true,
-      executions: 0,
       litActionTemplateId: "airdrop-hunter-action",
       litActionParameters: {
         maxGasPrice: "50",
@@ -102,7 +99,6 @@ class RulesEngine {
 
     // LayerZero Bridge Rule
     this.addRule({
-      id: "layerzero_bridge",
       name: "LayerZero Bridge Bot",
       trigger: "new_airdrop",
       condition: "project = 'layerzero' AND difficulty = 'hard'",
@@ -110,7 +106,6 @@ class RulesEngine {
       amount: "0.1",
       chain: "arbitrum",
       enabled: true,
-      executions: 0,
       litActionTemplateId: "bridge-action",
       litActionParameters: {
         bridgeProtocol: "layerzero",
@@ -120,7 +115,6 @@ class RulesEngine {
 
     // Starknet DEX Rule
     this.addRule({
-      id: "starknet_dex",
       name: "Starknet DEX Trader",
       trigger: "new_airdrop",
       condition: "chain = 'starknet' AND dex_volume > 1000",
@@ -128,7 +122,6 @@ class RulesEngine {
       amount: "0.02",
       chain: "starknet",
       enabled: true,
-      executions: 0,
       litActionTemplateId: "swap-action",
       litActionParameters: {
         dex: "uniswap-v3",
@@ -138,7 +131,6 @@ class RulesEngine {
 
     // ETH Staking Rule
     this.addRule({
-      id: "eth_staking",
       name: "ETH Staking Bot",
       trigger: "time_based",
       condition: "hour = 0 AND day % 7 = 0", // Weekly staking
@@ -146,7 +138,6 @@ class RulesEngine {
       amount: "0.1",
       chain: "ethereum",
       enabled: false,
-      executions: 0,
       litActionTemplateId: "stake-action",
       litActionParameters: {
         protocol: "lido",
@@ -319,9 +310,9 @@ class RulesEngine {
       // Create execution result
       const executionResult: LitActionExecutionResult = {
         success: result.success,
-        txHash: result.data?.txHash,
-        gasUsed: result.data?.gasUsed,
-        cost: result.data?.cost,
+        txHash: (result.data as { txHash?: string })?.txHash,
+        gasUsed: (result.data as { gasUsed?: number })?.gasUsed,
+        cost: (result.data as { cost?: string })?.cost,
         executionTime: result.executionTime,
         error: result.error,
         timestamp: new Date().toISOString(),
@@ -430,7 +421,7 @@ class RulesEngine {
   private prepareLitActionParameters(
     rule: AirdropRule,
     context: RuleExecutionContext
-  ): Record<string, any> {
+  ): Record<string, unknown> {
     const baseParams = { ...rule.litActionParameters };
 
     // Add context-specific parameters
@@ -495,7 +486,7 @@ class RulesEngine {
     for (const rule of activeRules) {
       try {
         // Create context based on rule trigger
-        const context = await this.createExecutionContext(rule);
+        const context = await this.createExecutionContext();
 
         // Check if rule should execute
         if (this.shouldExecuteRule(rule, context)) {
@@ -510,9 +501,7 @@ class RulesEngine {
   /**
    * Create execution context for a rule
    */
-  private async createExecutionContext(
-    rule: AirdropRule
-  ): Promise<RuleExecutionContext> {
+  private async createExecutionContext(): Promise<RuleExecutionContext> {
     const context: RuleExecutionContext = {};
 
     // Add time data
