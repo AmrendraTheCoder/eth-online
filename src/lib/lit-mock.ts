@@ -24,7 +24,7 @@ export class MockLitNodeClient {
     console.log("🔌 Mock LIT client disconnected");
   }
 
-  async executeJs(params: any) {
+  async executeJs(params: Record<string, unknown>) {
     console.log("🔧 Mock executeJs called with:", params);
     return {
       signatures: {},
@@ -35,7 +35,7 @@ export class MockLitNodeClient {
     };
   }
 
-  async mintPKP(params: any) {
+  async mintPKP(params: Record<string, unknown>) {
     console.log("🔧 Mock mintPKP called with:", params);
     return {
       pkp: {
@@ -56,11 +56,11 @@ export const LIT_NETWORKS = {
 };
 
 // Mock SessionSigs type
-export type SessionSigs = Record<string, any>;
+export type SessionSigs = Record<string, unknown>;
 
 // Mock LitAuthClient
 export class MockLitAuthClient {
-  async authenticateWithEthWallet(params: any) {
+  async authenticateWithEthWallet(_params: Record<string, unknown>) {
     console.log("🔧 Mock authenticateWithEthWallet called");
     return {
       sessionSigs: {
@@ -80,13 +80,13 @@ export class MockPKPEthersWallet {
   address: string;
   publicKey: string;
 
-  constructor(params: any) {
+  constructor(params: Record<string, unknown>) {
     this.address =
-      params.ethAddress || "0x" + Math.random().toString(16).substr(2, 40);
-    this.publicKey = params.publicKey || "mock_public_key";
+      (params.ethAddress as string) || "0x" + Math.random().toString(16).substr(2, 40);
+    this.publicKey = (params.publicKey as string) || "mock_public_key";
   }
 
-  async sendTransaction(tx: any) {
+  async sendTransaction(tx: Record<string, unknown>) {
     console.log("🔧 Mock sendTransaction called with:", tx);
     return {
       hash: "0x" + Math.random().toString(16).substr(2, 64),
@@ -102,7 +102,7 @@ export class MockPKPEthersWallet {
     return this.address;
   }
 
-  connect(provider: any) {
+  connect(_provider: unknown) {
     return this;
   }
 }

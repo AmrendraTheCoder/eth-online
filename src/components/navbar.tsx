@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "./ui/button";
 import {
@@ -34,6 +35,15 @@ import {
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loadingRoute, setLoadingRoute] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleNavigation = (href: string) => {
+    setLoadingRoute(href);
+    router.push(href);
+    // Reset loading state after navigation
+    setTimeout(() => setLoadingRoute(null), 1000);
+  };
 
   return (
     <>
@@ -355,42 +365,70 @@ export function Navbar() {
             {/* Right side actions */}
             <div className="flex items-center gap-3">
               <div className="hidden md:flex items-center gap-2">
-                <Link href="/agent/create">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    Create Agent
-                  </Button>
-                </Link>
-                <Link href="/dashboard">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    Dashboard
-                  </Button>
-                </Link>
-                <Link href="/rules">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    Rules
-                  </Button>
-                </Link>
-                <Link href="/activity">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-700 hover:text-gray-900"
-                  >
-                    Activity
-                  </Button>
-                </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-700 hover:text-gray-900"
+                  onClick={() => handleNavigation("/agent/create")}
+                  disabled={loadingRoute === "/agent/create"}
+                >
+                  {loadingRoute === "/agent/create" ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                      Loading...
+                    </div>
+                  ) : (
+                    "Create Agent"
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-700 hover:text-gray-900"
+                  onClick={() => handleNavigation("/dashboard")}
+                  disabled={loadingRoute === "/dashboard"}
+                >
+                  {loadingRoute === "/dashboard" ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                      Loading...
+                    </div>
+                  ) : (
+                    "Dashboard"
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-700 hover:text-gray-900"
+                  onClick={() => handleNavigation("/rules")}
+                  disabled={loadingRoute === "/rules"}
+                >
+                  {loadingRoute === "/rules" ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                      Loading...
+                    </div>
+                  ) : (
+                    "Rules"
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-700 hover:text-gray-900"
+                  onClick={() => handleNavigation("/activity")}
+                  disabled={loadingRoute === "/activity"}
+                >
+                  {loadingRoute === "/activity" ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                      Loading...
+                    </div>
+                  ) : (
+                    "Activity"
+                  )}
+                </Button>
               </div>
 
               <div className="hidden lg:flex">
@@ -418,46 +456,74 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 bg-white">
             <div className="container mx-auto px-4 py-4 space-y-2">
-              <Link
-                href="/agent/create"
-                className="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all duration-300 hover:scale-105 group"
-                onClick={() => setMobileMenuOpen(false)}
+              <button
+                className="block w-full px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-all duration-300 hover:scale-105 group disabled:opacity-50"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavigation("/agent/create");
+                }}
+                disabled={loadingRoute === "/agent/create"}
               >
                 <div className="flex items-center gap-3">
-                  <Bot className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                  Create Agent
+                  {loadingRoute === "/agent/create" ? (
+                    <div className="w-4 h-4 border-2 border-gray-300 border-t-purple-600 rounded-full animate-spin"></div>
+                  ) : (
+                    <Bot className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                  )}
+                  {loadingRoute === "/agent/create" ? "Loading..." : "Create Agent"}
                 </div>
-              </Link>
-              <Link
-                href="/dashboard"
-                className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-300 hover:scale-105 group"
-                onClick={() => setMobileMenuOpen(false)}
+              </button>
+              <button
+                className="block w-full px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-300 hover:scale-105 group disabled:opacity-50"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavigation("/dashboard");
+                }}
+                disabled={loadingRoute === "/dashboard"}
               >
                 <div className="flex items-center gap-3">
-                  <Target className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                  Dashboard
+                  {loadingRoute === "/dashboard" ? (
+                    <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+                  ) : (
+                    <Target className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                  {loadingRoute === "/dashboard" ? "Loading..." : "Dashboard"}
                 </div>
-              </Link>
-              <Link
-                href="/rules"
-                className="block px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-300 hover:scale-105 group"
-                onClick={() => setMobileMenuOpen(false)}
+              </button>
+              <button
+                className="block w-full px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-all duration-300 hover:scale-105 group disabled:opacity-50"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavigation("/rules");
+                }}
+                disabled={loadingRoute === "/rules"}
               >
                 <div className="flex items-center gap-3">
-                  <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-                  Rules
+                  {loadingRoute === "/rules" ? (
+                    <div className="w-4 h-4 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin"></div>
+                  ) : (
+                    <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
+                  )}
+                  {loadingRoute === "/rules" ? "Loading..." : "Rules"}
                 </div>
-              </Link>
-              <Link
-                href="/activity"
-                className="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-300 hover:scale-105 group"
-                onClick={() => setMobileMenuOpen(false)}
+              </button>
+              <button
+                className="block w-full px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-300 hover:scale-105 group disabled:opacity-50"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavigation("/activity");
+                }}
+                disabled={loadingRoute === "/activity"}
               >
                 <div className="flex items-center gap-3">
-                  <Activity className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                  Activity
+                  {loadingRoute === "/activity" ? (
+                    <div className="w-4 h-4 border-2 border-gray-300 border-t-orange-600 rounded-full animate-spin"></div>
+                  ) : (
+                    <Activity className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                  {loadingRoute === "/activity" ? "Loading..." : "Activity"}
                 </div>
-              </Link>
+              </button>
               <div className="pt-4">
                 <ConnectButton />
               </div>
