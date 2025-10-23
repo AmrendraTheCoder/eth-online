@@ -57,7 +57,9 @@ class LitClientManager {
     }
 
     if (this.isInitialized) {
-      throw new Error("LIT client already initialized. Only one instance allowed.");
+      throw new Error(
+        "LIT client already initialized. Only one instance allowed."
+      );
     }
 
     this.isConnecting = true;
@@ -196,7 +198,8 @@ const litClientManager = LitClientManager.getInstance();
 
 // Export convenience functions
 export const getLitClient = () => litClientManager.getClient();
-export const getLitConnectionStatus = () => litClientManager.getConnectionStatus();
+export const getLitConnectionStatus = () =>
+  litClientManager.getConnectionStatus();
 export const disconnectLitClient = () => litClientManager.disconnect();
 export const reconnectLitClient = () => litClientManager.reconnect();
 export const resetLitClient = () => LitClientManager.reset();
